@@ -89,40 +89,38 @@ cd my-workbench
 # Claude Code automatically reads CLAUDE.md and becomes meta-orchestrator
 ```
 
-### 2. Use Natural Language
+### 2. Natural Interaction
 ```bash
-# Feature development
-"Build user authentication with JWT tokens using security best practices"
-
-# Code review  
-"Review this payment processing PR with security and architecture perspectives"
-
-# Architecture decisions
-"Design a microservices architecture for this e-commerce system"
+# Simply describe what you need - Claude handles the rest
+"Build user authentication with JWT tokens"
+"Review this payment processing code" 
+"I need a microservices architecture for e-commerce"
+"Add dark mode to the settings page"
+"Optimize the database queries in the user service"
 ```
 
-### 3. Claude Coordinates Automatically
-1. **Reads agent documentation** to understand expert personas
-2. **Applies orchestration patterns** for systematic coordination
-3. **Embodies consultation agents** for strategic analysis
-4. **Embodies production agents** for implementation  
-5. **Validates quality** and resolves conflicts
-6. **Updates documentation** with learnings
+### 3. Claude Routes Automatically
+1. **Analyzes your request** to determine complexity and expertise needed
+2. **Routes to appropriate experts** (architecture, security, UX, etc.)
+3. **Coordinates team leads** who dispatch and manage specialists  
+4. **Handles all orchestration** - you don't need to know agent details
+5. **Delivers organized results** in repository-style project folders
+6. **Escalates decisions** only when your input is specifically needed
 
 ## Example Workflow
 
 **Request**: "Build secure user authentication system"
 
-**Claude's Orchestration**:
-1. **Reads feature-development.md** pattern
-2. **Becomes senior-architect** → analyzes system requirements
-3. **Becomes security-consultant** → performs threat modeling  
-4. **Becomes backend-builder** → implements secure APIs
-5. **Becomes security-implementer** → adds security controls
-6. **Validates quality** against 95% security threshold
-7. **Updates conventions.md** with learnings
+**Collaborative Workflow**:
+1. **Claude analyzes** → Determines architecture + security expertise needed
+2. **Agents propose solutions** → Senior architect proposes JWT vs session-based auth, Security consultant proposes OAuth2 vs custom implementation
+3. **Human makes decisions** → "Use JWT with OAuth2 integration, 2FA required"  
+4. **Decisions codified** → `conventions.md` updated with authentication standards for this project
+5. **Implementation proceeds** → Backend builder + security implementer build according to established conventions
+6. **Patterns documented** → `symbol-index.md` updated with auth agent relationships and dependencies
+7. **Results organized** → Complete project delivered in `.output/user-authentication/`
 
-**Result**: Professional-grade authentication system with systematic security validation.
+**Result**: Authentication system built according to your specific architectural decisions, with those decisions now codified as conventions for future work.
 
 ## Key Benefits
 
@@ -223,14 +221,27 @@ The system learns and adapts:
 
 ## Contributing
 
-This is a new approach to AI development orchestration. We welcome:
+This project is **open to contributions**, but with a specific focus:
 
-- **New agent personas** with specialized expertise
-- **Orchestration patterns** for different development workflows  
-- **Real-world testing** and validation examples
-- **Documentation improvements** and clarity enhancements
+### 🎯 We Welcome Contributions For:
+- **Workbench tool improvements** - Better orchestration patterns, quality validation, conflict resolution
+- **Framework enhancements** - Self-updating documentation, convention management, project organization
+- **Documentation clarity** - Making the meta-orchestrator approach more accessible
+- **Real-world testing** - Validation examples and integration patterns
+- **Core system features** - Session logging, institutional memory, quality gates
 
-See issues for current needs and discussion topics.
+### ❌ We Don't Accept:
+- **Specific agent personas** - The power is in the methodology, not the collection
+- **Pre-built agent libraries** - Each developer should create agents that match their domain expertise
+- **Domain-specific implementations** - This is a workbench for building your own specialized workflows
+
+### Why This Approach?
+
+The goal is to provide the **most useful boilerplate workbench tools** that enable developers to build their own systematic AI development processes. Adding specific agents would dilute the focus and create maintenance overhead for persona definitions that may not match your specific needs.
+
+**Instead**: Use this framework to create your own agents that perfectly match your domain expertise, development style, and project requirements.
+
+See issues for current framework improvements and discussion topics.
 
 ## License
 

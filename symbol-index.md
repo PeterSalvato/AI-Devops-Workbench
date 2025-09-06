@@ -1,163 +1,106 @@
-# Component Relationship Index
+# Agent Relationship & Pattern Index
 
-*This document maps relationships between agents, patterns, and system components for intelligent coordination.*
+*This document captures the relationships, dependencies, coordination patterns, and connection discoveries between AI agents during actual project work.*
 
-## Agent Relationship Map
+## Agent Authority & Decision Flow
 
-### Consultation Agents (Strategic Layer)
+### Decision Authority Hierarchy
+- **Human**: Final authority on all architectural choices, technology preferences, business priorities
+- **Security Consultant**: Veto authority on security implementations (non-negotiable compliance)
+- **Senior Architect**: Technical authority over system design and integration decisions  
+- **UX Strategist**: Authority over user experience flows and interface design patterns
 
-#### Senior Architect
-- **Provides input to**: All production agents (design specifications)
-- **Requires input from**: None (can work independently)  
-- **Coordinates with**: Security consultant (for security requirements), UX strategist (for user requirements)
-- **Authority level**: High for technical architecture decisions
-- **Trigger patterns**: System design, technology selection, complex features
+### Proposal → Decision → Implementation Flow
+1. **Consultation agents propose** technical options with trade-offs to human
+2. **Human decides** on architectural approaches, technology choices, security standards  
+3. **Decisions get codified** in conventions.md as binding standards
+4. **Production agents implement** according to established conventions
+5. **Patterns get documented** here in symbol-index.md for future coordination
 
-#### Security Consultant  
-- **Provides input to**: Security implementer (detailed requirements), Backend builder (secure coding), All agents (security constraints)
-- **Requires input from**: Senior architect (system context)
-- **Coordinates with**: All agents (security is cross-cutting)
-- **Authority level**: Absolute for security requirements (veto power)
-- **Trigger patterns**: Authentication, payments, sensitive data, compliance
+## Agent Coordination Discoveries
 
-#### UX Strategist
-- **Provides input to**: Frontend builder (user requirements), UI component builder (interaction patterns)
-- **Requires input from**: None (can work independently)
-- **Coordinates with**: Senior architect (for technical constraints)
-- **Authority level**: High for user experience decisions
-- **Trigger patterns**: User-facing features, interfaces, workflows
+### Successful Coordination Patterns
+*[Discovered during actual project work - populated by Claude]*
 
-#### Performance Expert
-- **Provides input to**: Backend builder (optimization requirements), Frontend builder (performance constraints)
-- **Requires input from**: Senior architect (system design)
-- **Coordinates with**: All builders (performance is cross-cutting)
-- **Authority level**: High for performance-critical decisions
-- **Trigger patterns**: High-traffic features, optimization needs, scalability
+**Pattern**: [Name of coordination approach]
+- **Agents involved**: [Which agents participated]
+- **Project context**: [What project/feature this worked on]
+- **Coordination method**: [How they worked together]  
+- **Success indicators**: [Why this approach was effective]
+- **Reusability**: [When this pattern applies to future projects]
 
-#### Code Reviewer
-- **Provides input to**: All agents (quality feedback)
-- **Requires input from**: All other agents (for context)
-- **Coordinates with**: All agents (review is final validation)
-- **Authority level**: Gate-keeper for production deployment
-- **Trigger patterns**: All production code, quality validation
+### Agent Dependency Mapping
+*[Updated as dependencies are discovered during coordination]*
 
-### Production Agents (Implementation Layer)
+**Agent Dependencies Discovered**:
+- **[Agent Name] → [Required Input From]**: [Specific dependency discovered]
+- **[Agent Name] ↔ [Coordination With]**: [Bi-directional coordination needed]
+- **[Agent Name] → [Provides To]**: [What this agent delivers to others]
 
-#### Backend Builder
-- **Receives input from**: Senior architect (design), Security consultant (requirements), Performance expert (constraints)
-- **Provides output to**: Frontend builder (API contracts), Security implementer (integration points)
-- **Coordinates with**: Frontend builder (API design), Security implementer (auth integration)
-- **Dependencies**: Architecture decisions, security requirements
-- **Specialization**: APIs, databases, business logic, server-side implementation
+### Cross-Agent Integration Points
+*[Documented as integration challenges and solutions are discovered]*
 
-#### Frontend Builder  
-- **Receives input from**: Senior architect (architecture), UX strategist (requirements), Backend builder (API contracts)
-- **Provides output to**: UI component builder (component specs), CSS specialist (integration needs)
-- **Coordinates with**: Backend builder (API contracts), UI component builder (component integration)
-- **Dependencies**: UX strategy, API availability, component library
-- **Specialization**: React/Vue/Angular, state management, user interactions
+**Integration Point**: [Specific coordination challenge]
+- **Agents involved**: [Which agents needed to coordinate]
+- **Challenge**: [What made coordination difficult]
+- **Solution pattern**: [How coordination was achieved]
+- **Future application**: [When to use this coordination approach]
 
-#### Security Implementer
-- **Receives input from**: Security consultant (detailed requirements), Backend builder (system context)
-- **Provides output to**: All agents (security integration points)
-- **Coordinates with**: Backend builder (authentication systems), Frontend builder (security UI)
-- **Dependencies**: Security analysis complete, system architecture defined
-- **Specialization**: Authentication, authorization, encryption, security middleware
+## Connection Network Evolution
 
-#### UI Component Builder
-- **Receives input from**: UX strategist (design patterns), Frontend builder (integration needs)
-- **Provides output to**: CSS specialist (styling requirements), Frontend builder (components)
-- **Coordinates with**: CSS specialist (visual design), Frontend builder (integration)
-- **Dependencies**: Design system, UX patterns defined
-- **Specialization**: Reusable components, design system, accessibility
+### Agent Relationship Strengths
+*[Mapped as relationships prove effective or problematic]*
 
-#### CSS Specialist
-- **Receives input from**: UI component builder (components), UX strategist (design requirements)
-- **Provides output to**: Frontend builder (styled components)
-- **Coordinates with**: UI component builder (component styling), Frontend builder (integration)
-- **Dependencies**: Component library, design specifications
-- **Specialization**: Styling, responsive design, visual polish, CSS architecture
+**Strong Coordination Pairs**:
+- **[Agent A] + [Agent B]**: [Why they work well together]
+- **[Agent C] + [Agent D]**: [What makes their coordination effective]
 
-## Orchestration Pattern Triggers
+**Challenging Coordination Points**:  
+- **[Agent X] ↔ [Agent Y]**: [What coordination challenges exist]
+- **Resolution approach**: [How to handle this coordination challenge]
 
-### Pattern: consultation_then_production
-**Triggered by**: "Build [feature]", "Implement [system]", "Create [component]"
-**Agent flow**: 
-1. Senior architect (if system design needed)
-2. Domain consultants (security, UX, performance as needed)
-3. Production agents (backend, frontend, security implementer as needed)
-4. Code reviewer (validation)
+### Communication Flow Discoveries
+*[Documented as effective communication patterns emerge]*
 
-### Pattern: consensus_validation  
-**Triggered by**: "Review [code]", "Validate [implementation]", "Approve [PR]"
-**Agent flow**:
-1. Relevant consultants (parallel review)
-2. Consensus building
-3. Code reviewer (final approval)
+**Effective Communication Patterns**:
+- **[Situation]**: [What type of project/challenge]  
+- **Communication flow**: [How agents should communicate for this situation]
+- **Key handoff points**: [Critical information transfer moments]
+- **Success metrics**: [How to know communication is working]
 
-### Pattern: hierarchical_security
-**Triggered by**: "Security audit", "Penetration test", "Compliance check"
-**Agent flow**:
-1. Security consultant (threat analysis)
-2. Security implementer (implementation review)
-3. Penetration testing
-4. Code reviewer (security approval)
+## Project-Specific Pattern Learnings
 
-### Pattern: collaborative_design
-**Triggered by**: "Design system", "Architecture decision", "Technology selection"  
-**Agent flow**:
-1. Senior architect (design options)
-2. Relevant consultants (domain input)
-3. Consensus and ratification
-4. Documentation update
+### Authentication System Patterns
+*[Example - to be populated with actual learnings]*
 
-## Quality Threshold Matrix
+### API Development Patterns  
+*[To be populated as API projects are completed]*
 
-| Component Type | Min Quality | Required Agents | Special Rules |
-|---------------|-------------|-----------------|---------------|
-| Authentication | 95% | Architect + Security + Backend + Security Impl | Penetration testing required |
-| Payment Processing | 95% + PCI | Architect + Security + Backend + Security Impl | Compliance validation required |
-| Public APIs | 90% | Architect + Backend + Security | Rate limiting + documentation required |
-| User Interfaces | 90% | Architect + UX + Frontend + UI Builder | Accessibility validation required |
-| Performance Critical | 90% + benchmarks | Architect + Performance + Relevant builders | Load testing required |
-| Security Critical | 95% | Security + Relevant implementers | Security testing required |
+### Frontend Integration Patterns
+*[To be populated as UI projects are completed]*
 
-## Conflict Resolution Matrix
+### Security Implementation Patterns
+*[To be populated as security projects are completed]*
 
-| Conflict Type | Resolution Authority | Escalation Path | Decision Factors |
-|---------------|---------------------|-----------------|------------------|
-| Architecture vs Security | Security consultant | User decision | Security requirements non-negotiable |
-| UX vs Performance | Senior architect | User preference | Balance user needs vs technical constraints |
-| Implementation approach | Senior architect | Consensus building | Technical merit and maintainability |
-| Resource allocation | User decision | Project priorities | Business requirements and timeline |
-| Quality standards | Code reviewer | Quality framework | Established quality gates |
+## Institutional Memory
 
-## Dependency Relationships
+### Repeated Decision Patterns
+*[Track which human decisions tend to repeat across projects]*
 
-### Critical Path Dependencies
-1. **Architecture → Implementation**: All production agents depend on architectural decisions
-2. **Security Analysis → Security Implementation**: Security implementer depends on security consultant
-3. **UX Strategy → Frontend**: Frontend builder depends on UX strategist for user-facing features
-4. **API Design → Frontend**: Frontend builder depends on backend builder for API contracts
+**Decision Pattern**: [Type of recurring decision]
+- **Frequency**: [How often this decision type occurs]
+- **Common choice**: [What humans typically decide]
+- **Context factors**: [When humans choose differently]
+- **Convention status**: [Whether this is now codified]
 
-### Optional Dependencies  
-1. **Performance Analysis → Optimization**: Performance expert input enhances but doesn't block implementation
-2. **Code Review → All**: Code reviewer can work with any completed implementation
-3. **Component Library → Styling**: UI components can be styled after creation
+### Agent Capability Evolution
+*[Document how agent effectiveness changes over time]*
 
-## Communication Protocols
-
-### Formal Handoffs (Required)
-- **Consultation → Production**: Complete specifications with acceptance criteria
-- **Architecture → Implementation**: Technical specifications with implementation details
-- **Security Requirements → Implementation**: Detailed security specifications with validation criteria
-- **API Contracts**: Agreed interface specifications before frontend development
-
-### Informal Coordination (Recommended)
-- **Cross-cutting concerns**: Security, performance, quality considerations shared across agents
-- **Integration planning**: Early coordination on integration points and dependencies
-- **Quality feedback**: Continuous feedback loops between agents during development
+**Agent Improvement Observations**:
+- **[Agent Name]**: [How performance/coordination has improved]
+- **Coordination enhancement**: [How multi-agent work has gotten better]
+- **Pattern recognition**: [What coordination patterns are becoming automatic]
 
 ---
 
-*This document is automatically updated based on agent coordination patterns and relationship learnings. Last updated: [Date will be auto-updated by Claude during sessions]*
+*This document grows through actual project experience. Each coordination session adds discovered patterns, successful relationships, and integration solutions that improve future multi-agent collaboration.*

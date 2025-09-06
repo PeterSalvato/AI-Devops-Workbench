@@ -15,11 +15,11 @@
 - **UX strategist required** for user-facing features and interfaces
 - **Performance expert required** for high-traffic or performance-critical components
 
-### 3. Quality Gates
-- **90% minimum** for production deployments
-- **95% minimum** for security-critical systems (auth, payments, PII)
-- **All agents must agree** on major architectural decisions
-- **Security requirements are non-negotiable** - security consultant has veto power
+### 3. Quality Standards
+- **Production readiness** validated through systematic review
+- **Security-critical systems** require comprehensive security consultant validation
+- **Major architectural decisions** require consensus across relevant agents
+- **Security requirements are non-negotiable** - security consultant has veto authority
 
 ## Agent Handoff Protocols
 
@@ -74,41 +74,56 @@
 - **Pattern**: consultation_then_production
 - **Required**: Senior architect OR existing architecture + domain consultants
 - **Flow**: Consultation → Production → Validation
-- **Quality Gate**: 90% minimum, all requirements met
+- **Completion**: All requirements implemented and validated
 
 ### Code Review
 - **Pattern**: consensus_validation
 - **Required**: Relevant domain experts (security, performance, architecture)
 - **Flow**: Parallel review → Consensus → Recommendations
-- **Quality Gate**: 95% minimum for production approval
+- **Completion**: Production-ready code with documented recommendations
 
 ### Security Audit
 - **Pattern**: hierarchical_security
 - **Required**: Security consultant + relevant implementation experts
-- **Flow**: Threat analysis → Implementation review → Penetration testing
-- **Quality Gate**: 100% security requirements, no critical vulnerabilities
+- **Flow**: Threat analysis → Implementation review → Security testing
+- **Completion**: Security requirements satisfied, vulnerabilities addressed
 
 ### Architecture Design
 - **Pattern**: collaborative_design
 - **Required**: Senior architect + relevant domain consultants
 - **Flow**: Requirements → Design options → Consensus → Specification
-- **Quality Gate**: Architecture supports all requirements, clear rationale
+- **Completion**: Architecture specification with clear rationale and trade-offs
 
-## Self-Updating Rules
+## Human Decision Codification
 
-### When to Update This Document
-- **New patterns emerge** from successful project coordination
-- **Conflict resolution learnings** from difficult decisions
-- **Quality threshold adjustments** based on project outcomes
-- **Process improvements** discovered during development
+### When Conventions Are Established
+- **Human makes architectural decisions** during agent proposal phases
+- **Technology stack preferences** chosen from architect recommendations  
+- **Security standards selected** from security consultant options
+- **Process preferences established** when coordinating multi-agent work
 
-### Update Format
+### Convention Update Triggers
+- **Immediate**: When human decides on architectural approaches, technology choices, security standards
+- **Project completion**: Process improvements and coordination patterns that worked well
+- **Conflict resolution**: When resolution approaches prove effective for similar future conflicts
+
+### Decision Documentation Format
+```markdown  
+## Decision Codified: [Date]
+- **Context**: [What project/situation required this decision]
+- **Human Decision**: [Specific architectural/technical choice made]
+- **Agent Proposals**: [What options were presented by which agents]
+- **Rationale**: [Why human selected this approach]
+- **Scope**: [This project only / Similar projects / All future projects]
+```
+
+### Process Pattern Format
 ```markdown
-## New Rule Added: [Date]
-- **Context**: [What situation led to this rule]
-- **Rule**: [The new convention or process]
-- **Rationale**: [Why this improves coordination]
-- **Impact**: [What changes in behavior]
+## Process Pattern: [Date]  
+- **Context**: [What coordination challenge was solved]
+- **Pattern**: [How agents worked together successfully]
+- **Agents Involved**: [Which agents participated and how]
+- **Effectiveness**: [Why this coordination approach worked]
 ```
 
 ### Review Triggers
@@ -120,24 +135,20 @@
 ## Project-Specific Overrides
 
 ### Authentication Systems
-- **Quality threshold**: 95% minimum
 - **Required agents**: Senior architect + Security consultant + Backend builder + Security implementer
-- **Special rules**: Penetration testing required, compliance validation
+- **Special requirements**: Security testing, compliance validation, audit trail
 
 ### Payment Processing  
-- **Quality threshold**: 100% security, 95% overall
 - **Required agents**: Senior architect + Security consultant + Backend builder + Security implementer
-- **Special rules**: PCI DSS compliance, financial regulations, audit trail
+- **Special requirements**: PCI DSS compliance, financial regulations, comprehensive audit trail
 
 ### Public APIs
-- **Quality threshold**: 90% minimum
 - **Required agents**: Senior architect + Backend builder + Security consultant
-- **Special rules**: Rate limiting required, comprehensive documentation, versioning strategy
+- **Special requirements**: Rate limiting, comprehensive documentation, versioning strategy
 
 ### Performance-Critical Features
-- **Quality threshold**: 90% minimum + performance benchmarks
 - **Required agents**: Senior architect + Performance expert + relevant builders
-- **Special rules**: Load testing required, monitoring implementation, optimization validation
+- **Special requirements**: Load testing, monitoring implementation, performance benchmarking
 
 ---
 

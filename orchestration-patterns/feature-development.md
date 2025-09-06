@@ -1,7 +1,7 @@
 # Feature Development Orchestration Pattern
 
 ## Pattern Type
-**Consultation → Production Pipeline** - Strategic consultation followed by coordinated implementation
+**Hierarchical Management** - Human decision maker → Claude as dept head manager → Consultation agents as team leads → Production agents as specialists
 
 ## Use Cases
 - Building new features or components
@@ -9,57 +9,107 @@
 - Implementing complex business requirements
 - Cross-cutting concerns (auth, payments, integrations)
 
-## Agent Coordination Flow
+## Management Hierarchy
 
-### Phase 1: Strategic Consultation
-**Objective**: Understand requirements and create implementation strategy
+### Level 1: Human Decision Maker
+**Role**: Strategic direction, business requirements, final approval
+- Defines project requirements and priorities
+- Makes business and preference decisions
+- Approves major architectural choices
+- Sets quality thresholds and timeline constraints
 
-1. **Senior Architect** (if system design needed)
-   - Analyze requirements and constraints
-   - Design system architecture and component structure
-   - Define technology stack and implementation approach
-   - Identify integration points and dependencies
+### Level 2: Claude Meta-Orchestrator  
+**Role**: Department head managing consultation team leads
+- Interprets human requirements into technical specifications
+- Assigns consultation agents based on project complexity
+- Coordinates between consultation team leads
+- Manages conflicts and escalations
+- Ensures quality gates are met
 
-2. **Domain Consultants** (as needed)
-   - **Security Consultant**: For auth, payments, sensitive data
-   - **UX Strategist**: For user-facing features
-   - **Performance Expert**: For high-traffic or performance-critical features
+### Level 3: Consultation Agents (Team Leads)
+**Role**: Technical department heads who dispatch and manage production specialists
 
-### Phase 2: Production Implementation
-**Objective**: Build feature according to consultation strategy
+#### Senior Architect (Systems Team Lead)
+- **Analyzes** system requirements and constraints
+- **Designs** architecture and component structure  
+- **Dispatches** backend builders, database specialists
+- **Coordinates** between all production agents
+- **Validates** implementation against architectural decisions
 
-3. **Production Agents** (coordinated execution)
-   - **Backend Builder**: API endpoints, business logic, data models
-   - **Frontend Builder**: UI components, state management, user interactions
-   - **Security Implementer**: Security controls, auth implementation
-   - **CSS Specialist**: Styling, responsive design, visual polish
+#### Security Consultant (Security Team Lead)  
+- **Analyzes** threat models and security requirements
+- **Designs** security architecture and controls
+- **Dispatches** security implementers, penetration testers
+- **Coordinates** security integration across all components
+- **Validates** security implementations and testing
 
-### Phase 3: Integration & Validation
-**Objective**: Ensure quality and production readiness
+#### UX Strategist (UX Team Lead)
+- **Analyzes** user requirements and experience flows
+- **Designs** user interface strategy and patterns
+- **Dispatches** frontend builders, CSS specialists
+- **Coordinates** user experience across all touchpoints
+- **Validates** user interface implementation and usability
 
-4. **Code Reviewer**
-   - Validate implementation against consultation recommendations
-   - Check code quality, testing, and documentation
-   - Ensure security and performance requirements are met
+### Level 4: Production Agents (Specialists)
+**Role**: Implementation specialists managed by consultation team leads
 
-## Coordination Rules
+#### Under Senior Architect Management
+- **Backend Builder**: APIs, business logic, data models
+- **Database Specialist**: Schema design, optimization, migrations  
+- **Integration Specialist**: External APIs, microservices communication
 
-### Consultation Phase Rules
-- **Sequential execution** - architects and consultants work together
-- **Consensus required** - major decisions need agreement between consultants
-- **Document all decisions** - rationale and trade-offs must be clear
-- **Security non-negotiable** - security consultant has veto power
+#### Under Security Consultant Management  
+- **Security Implementer**: Auth systems, encryption, security controls
+- **Penetration Tester**: Security validation, vulnerability assessment
 
-### Production Phase Rules
-- **Parallel execution possible** - production agents can work simultaneously
-- **Clear interfaces** - API contracts must be agreed upon before frontend work
-- **Continuous integration** - agents coordinate on shared interfaces
-- **Quality gates** - each agent's output must meet quality standards
+#### Under UX Strategist Management
+- **Frontend Builder**: UI components, state management, user interactions
+- **CSS Specialist**: Styling, responsive design, visual polish
+- **Accessibility Specialist**: WCAG compliance, inclusive design
 
-### Handoff Protocols
-- **Consultation → Production**: Complete specifications with implementation details
-- **Between Production Agents**: Clear interfaces and integration points
-- **Production → Validation**: Complete implementation with tests and documentation
+### Project Output Structure
+All work outputs to organized project folders:
+```
+.output/project-name/
+├── requirements/           # Human requirements and decisions
+├── architecture/          # Senior architect specifications and decisions  
+├── security/             # Security consultant analysis and requirements
+├── ux-strategy/          # UX strategist wireframes and user flows
+├── code/                 # Production agent implementations
+│   ├── backend/          # Backend builder outputs
+│   ├── frontend/         # Frontend builder outputs  
+│   ├── security/         # Security implementer outputs
+│   └── styles/           # CSS specialist outputs
+├── documentation/        # Generated docs from all agents
+├── testing/             # Test plans and results
+└── session-log.md       # Management coordination record
+```
+
+## Management Coordination Rules
+
+### Human → Claude Meta-Orchestrator
+- **Human provides**: Requirements, priorities, business context, quality expectations
+- **Claude interprets**: Technical implications, agent requirements, coordination strategy
+- **Human approves**: Major architectural decisions, resource allocation, timeline changes
+- **Claude reports**: Progress, conflicts, quality status, completion
+
+### Claude → Consultation Team Leads  
+- **Claude assigns**: Consultation agents based on project complexity and requirements
+- **Consultation leads analyze**: Requirements within their domain expertise
+- **Consultation leads propose**: Technical approach, resource needs, implementation strategy  
+- **Claude coordinates**: Between team leads, resolves conflicts, ensures consensus
+
+### Consultation Team Leads → Production Specialists
+- **Team leads dispatch**: Specific production agents based on technical analysis
+- **Team leads provide**: Detailed specifications, quality requirements, integration points
+- **Production agents implement**: According to team lead specifications and coordination
+- **Team leads validate**: Implementation against specifications and quality standards
+
+### Cross-Team Coordination
+- **Senior architect coordinates** all technical integration points
+- **Security consultant validates** all security implementations across teams  
+- **UX strategist ensures** consistent user experience across all components
+- **Claude manages** conflicts between team leads and escalates to human as needed
 
 ## Context Requirements
 
