@@ -1,0 +1,14 @@
+# Core dependencies for AI DevOps Framework
+# Framework is designed to work with various AI providers
+
+# JSON schema validation
+jsonschema>=4.0.0
+
+# Optional AI provider integrations
+# openai>=1.0.0  # Uncomment if using OpenAI
+# anthropic>=0.3.0  # Uncomment if using Anthropic
+# langchain>=0.1.0  # Uncomment if integrating with LangChain
+
+# Development and testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
