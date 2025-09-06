@@ -210,3 +210,6 @@ docker-compose.override.yml
 
 # Jupyter notebook outputs (keep notebooks, remove outputs)
 *.ipynb
+
+# Archive directory (keep locally but not in repo)
+.archive/
