@@ -1,7 +1,10 @@
-# Project Conventions & Architectural Decisions
+# Team Conventions & Architectural Decisions
 
-*User architectural decisions and coding standards that Claude applies consistently across all development work. This context prevents "vibecoding" by codifying your specific preferences.*
+*Team-wide architectural decisions and coding standards that Claude applies consistently across all development work. These conventions are shared across all team members and take precedence over individual preferences.*
 
+**Priority**: HIGHEST - Team conventions override individual preferences  
+**Scope**: All team members must follow these decisions  
+**Updates**: Requires team consensus or technical lead approval  
 **Updated**: 2024-09-09 (automatically maintained by Claude during development sessions)
 
 ## Technology Stack Preferences

@@ -96,6 +96,12 @@ ai-devops-framework/              # The AI orchestration workbench
 git clone https://github.com/PeterSalvato/AI-DevOps-Framework enterprise-ai-development
 cd enterprise-ai-development
 # Claude automatically reads CLAUDE.md - system is immediately operational
+
+# Team Setup: Establish team conventions systematically
+# Use project-memory/templates/team-decision-onboarding-guide.md (2 weeks)
+
+# Individual Setup: Configure personal preferences  
+# Copy project-memory/individual/personal-conventions-template.md to personal-conventions.md
 ```
 
 ### Immediate Business Value
@@ -147,7 +153,8 @@ cd enterprise-ai-development
 - **Technical Debt Reduction**: Prevent architectural drift through automated convention enforcement
 
 ### For Development Teams
-- **Institutional Memory**: Never re-explain architectural preferences in each session
+- **Hierarchical Context Management**: Team conventions take precedence, individual preferences apply when no team decision exists
+- **Systematic Decision Making**: Structured workflow for making and documenting team conventions
 - **Multi-Expert Validation**: Security, performance, and architecture review on every deliverable
 - **Learning System**: AI gets smarter about your specific coordination needs over time
 - **Production-Ready Outputs**: Complete project deliverables with proper documentation structure
