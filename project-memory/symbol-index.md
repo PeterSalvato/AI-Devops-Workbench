@@ -1,21 +1,48 @@
-# Agent Relationship & Pattern Index
+# Codebase Symbol Index & Dependencies
 
-*This document captures the relationships, dependencies, coordination patterns, and connection discoveries between AI agents during actual project work.*
+*Maintains an index of codebase structure, function dependencies, and interconnections. This context enables Claude to understand existing code and make changes without breaking integrations.*
 
-## Agent Authority & Decision Flow
+**Key Function**: This maintains an index of your codebase structure, function dependencies, and interconnections - providing Claude with the context needed to understand and modify existing code without breaking integrations.
 
-### Decision Authority Hierarchy
-- **Human**: Final authority on all architectural choices, technology preferences, business priorities
-- **Security Consultant**: Veto authority on security implementations (non-negotiable compliance)
-- **Senior Architect**: Technical authority over system design and integration decisions  
-- **UX Strategist**: Authority over user experience flows and interface design patterns
+**Updated**: 2024-09-09 (automatically maintained by Claude during development sessions)
 
-### Proposal → Decision → Implementation Flow
-1. **Consultation agents propose** technical options with trade-offs to human
-2. **Human decides** on architectural approaches, technology choices, security standards  
-3. **Decisions get codified** in conventions.md as binding standards
-4. **Production agents implement** according to established conventions
-5. **Patterns get documented** here in symbol-index.md for future coordination
+## Core Service Architecture
+
+### Authentication Service (`src/auth-service/core.ts`)
+**Dependencies**:
+- **Database**: `userRepository` (PostgreSQL user tables)
+- **Cache**: `redisClient` (session storage)
+- **Email**: `emailService` (verification emails)
+- **Crypto**: `bcrypt`, `jsonwebtoken` libraries
+
+**Exports**:
+- `authenticateUser()` → Used by API middleware (MOVED from src/services/auth/ on 2024-09-09)
+- `generateTokens()` → Used by login/refresh endpoints  
+- `validateSession()` → Used by protected routes
+- `revokeSession()` → Used by logout functionality
+
+**Integration Points**:
+- **API Gateway**: All `/auth/*` routes depend on this service
+- **User Service**: Calls `validateSession()` for user data requests
+- **Admin Service**: Requires admin role validation through this service
+
+### User Management Service (`src/services/users/`)
+**Dependencies**:
+- **Auth Service**: `validateSession()` for permission checks
+- **Database**: `userRepository`, `profileRepository`
+- **Storage**: `s3Client` for profile images
+- **Validation**: `userValidationSchemas`
+
+**Exports**:
+- `getUserProfile()` → Used by frontend user dashboard
+- `updateUserProfile()` → Used by profile edit forms
+- **deleteUser()** → Used by admin panel and GDPR compliance
+- `listUsers()` → Used by admin user management interface
+
+**Integration Points**:
+- **Frontend Dashboard**: Directly consumes user profile data
+- **Admin Panel**: Uses user management functions with role validation
+- **Audit Service**: Receives user action events for compliance logging
 
 ## Agent Coordination Discoveries
 

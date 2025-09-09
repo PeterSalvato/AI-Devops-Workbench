@@ -1,6 +1,6 @@
 # Project Itinerary
 
-*Active project tracking for the AI DevOps Workbench*
+*Active project tracking for the AI DevOps Framework*
 
 ## Current Projects in Progress
 
@@ -198,4 +198,4 @@
 
 ---
 
-*This itinerary is maintained by Claude meta-orchestrator and provides visibility into active development work across the AI DevOps Workbench.*
+*This itinerary is maintained by Claude meta-orchestrator and provides visibility into active development work across the AI DevOps Framework.*
