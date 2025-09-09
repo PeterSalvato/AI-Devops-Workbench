@@ -1,8 +1,8 @@
 # Team Conventions & Architectural Decisions
 
-*Team-wide architectural decisions and coding standards that Claude applies consistently across all development work. These conventions are shared across all team members and take precedence over individual preferences.*
+*Team-wide architectural decisions and coding standards that Claude applies consistently across all development work. These conventions are the single source of truth for all development decisions.*
 
-**Priority**: HIGHEST - Team conventions override individual preferences  
+**Priority**: HIGHEST - Team conventions are the only decision source (no individual preferences)  
 **Scope**: All team members must follow these decisions  
 **Updates**: Requires team consensus or technical lead approval  
 **Updated**: 2024-09-09 (automatically maintained by Claude during development sessions)
@@ -229,6 +229,28 @@ try {
   );
 }
 ```
+
+## Team Size & Scalability Constraints
+
+### Recommended Team Size Limit
+**Decision Made**: 2024-09-09 (System scalability analysis)  
+**Limit**: Maximum 10 developers per framework instance (15 absolute maximum)  
+**Rationale**: Single conventions file + decision coordination complexity (individual preferences eliminated)  
+**Apply To**: All framework deployments  
+
+### Scalability Constraints
+- **Context Management**: Single conventions file becomes unwieldy beyond 10 concurrent decisions
+- **Decision Authority**: Current hierarchy (security > architecture > domain) assumes small team structure  
+- **Cognitive Load**: Meta-orchestrator coordination complexity increases exponentially with team size
+- **Quality Gates**: Validation patterns designed for small team consensus, not enterprise review cycles
+
+### Beyond 10 Developers
+Teams larger than 10 developers require additional safeguards:
+- Hierarchical conventions (team/squad/guild levels)
+- Automated convention conflict detection  
+- Role-based decision authority matrices
+- Convention approval workflows with formal sign-off
+- Multiple framework instances with cross-instance coordination
 
 ---
 
