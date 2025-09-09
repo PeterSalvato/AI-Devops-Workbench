@@ -1,6 +1,6 @@
-# AI DevOps Framework: Enterprise AI Development with Memory & Governance
+# AI DevOps Workbench: Enterprise AI Development with Memory & Governance
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](https://github.com/PeterSalvato/AI-DevOps-Framework) [![Repository Audit](https://img.shields.io/badge/Repository%20Audit-A%2B%20Grade-brightgreen.svg)](FRAMEWORK_AUDIT_REPORT.md) [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-blue.svg)](https://claude.ai/code) [![Enterprise Ready](https://img.shields.io/badge/Enterprise-Ready-purple.svg)](ENTERPRISE_GOVERNANCE_BREAKTHROUGH.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](https://github.com/PeterSalvato/AI-DevOps-Workbench) [![Repository Audit](https://img.shields.io/badge/Repository%20Audit-A%2B%20Grade-brightgreen.svg)](FRAMEWORK_AUDIT_REPORT.md) [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-blue.svg)](https://claude.ai/code) [![Enterprise Ready](https://img.shields.io/badge/Enterprise-Ready-purple.svg)](ENTERPRISE_GOVERNANCE_BREAKTHROUGH.md)
 
 **The first integrated AI development system with persistent institutional memory, multi-agent coordination, and enterprise governance.**
 
@@ -80,7 +80,7 @@ User approval workflows and systematic decision tracking:
 
 ```bash
 # 5-minute setup
-git clone https://github.com/PeterSalvato/AI-DevOps-Framework my-development-ai
+git clone https://github.com/PeterSalvato/AI-DevOps-Workbench my-development-ai
 cd my-development-ai
 
 # Claude automatically loads CLAUDE.md and becomes your coordinated development team

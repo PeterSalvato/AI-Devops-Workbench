@@ -1,6 +1,6 @@
 # Small Team Enterprise Software Development Guide
 
-*Optimized guidance for 2-6 developer teams building enterprise-grade software using the AI DevOps Framework*
+*Optimized guidance for 2-6 developer teams building enterprise-grade software using the AI DevOps Workbench*
 
 **Target Audience**: Small development teams working on business-critical, enterprise-quality software  
 **Framework Status**: ✅ **Production Ready - Deploy Immediately**  
@@ -35,7 +35,7 @@ You need **enterprise-grade quality and consistency** but can't afford **enterpr
 ### Step 1: Clone and Initialize (5 minutes)
 ```bash
 # Get the framework
-git clone https://github.com/PeterSalvato/AI-DevOps-Framework your-team-ai-framework
+git clone https://github.com/PeterSalvato/AI-DevOps-Workbench your-team-ai-framework
 cd your-team-ai-framework
 
 # Ready to use - Claude automatically reads CLAUDE.md

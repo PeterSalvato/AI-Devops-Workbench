@@ -1,6 +1,6 @@
-# Implementation Playbook: AI DevOps Framework
+# Implementation Playbook: AI DevOps Workbench
 
-*Step-by-step guide for teams to successfully deploy and adopt the AI DevOps Framework for systematic development.*
+*Step-by-step guide for teams to successfully deploy and adopt the AI DevOps Workbench for systematic development.*
 
 ## Pre-Implementation Assessment
 
@@ -22,7 +22,7 @@
 ### Step 1: Repository Setup
 ```bash
 # Clone the AI DevOps Framework
-git clone https://github.com/PeterSalvato/AI-DevOps-Framework your-dev-framework
+git clone https://github.com/PeterSalvato/AI-DevOps-Workbench your-dev-framework
 cd your-dev-framework
 
 # Remove example content and initialize for your team
