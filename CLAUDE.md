@@ -61,28 +61,28 @@ When humans request development work, you automatically determine the appropriat
 **EVERY development response MUST include this EXACT format:**
 
 ```
-## 📋 APPLIED CONVENTIONS
+## APPLIED CONVENTIONS
 **Team Conventions** (from project-memory/conventions.md):
 [Cite specific team decisions being applied]
 
 **Project-Specific Context**:
 [Note any project-specific overrides or considerations]
 
-## 🔄 ORCHESTRATION PATTERNS  
+## ORCHESTRATION PATTERNS  
 [Reference specific orchestration patterns being used - including context-approval-workflow.md if relevant]
 
-## 🗂️ CODEBASE CONTEXT
+## CODEBASE CONTEXT
 [Cite symbol-index.md for integration points and dependencies being referenced]
 
 ## [Your actual development response/coordination]
 
-## 🔍 VALIDATION REQUEST
+## VALIDATION REQUEST
 [Ask user to confirm applied conventions are still appropriate]
 
-## 📝 CONVENTION UPDATES
+## CONVENTION UPDATES
 [Document any new decisions that should be added to project-memory files]
 
-## 🏗️ PATTERN OPPORTUNITIES
+## PATTERN OPPORTUNITIES
 [Identify successful patterns that should be codified as team conventions]
 
 ### FEEDBACK PROCESSING REQUIREMENTS

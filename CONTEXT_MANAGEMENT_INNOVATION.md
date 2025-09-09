@@ -159,7 +159,7 @@
 **Reality**: Function moved to src/auth-service/core.ts during refactoring
 
 **System Response**:
-1. **Drift Detection**: "⚠️ CONTEXT VALIDATION REQUIRED - Referenced function location outdated"
+1. **Drift Detection**: "CONTEXT VALIDATION REQUIRED - Referenced function location outdated"
 2. **User Notification**: "Please verify authenticateUser() current location before proceeding"  
 3. **Immediate Update**: User provides correction → symbol-index.md updated in same session
 4. **Validation Confirmation**: "Context updated - future sessions will use correct location"
@@ -178,7 +178,7 @@
 ```
 
 **System Response**:
-1. **Conflict Detection**: "⚠️ CONFLICTING CONVENTIONS DETECTED in conventions.md"
+1. **Conflict Detection**: "CONFLICTING CONVENTIONS DETECTED in conventions.md"
 2. **Present Conflict**: "Node.js (Aug 15) vs Python (Sep 1) - which should apply?"
 3. **Resolution Request**: "Please clarify current backend standard for consistent application"
 4. **Context Cleanup**: Update conventions.md to resolve contradiction
@@ -449,10 +449,10 @@
 ✅ Performance optimization for sub-3-second loading
 
 **Future Evolution** (Large enterprise deployment):
-🔄 Hierarchical context management (team/squad/guild/org)
-🔄 Multi-instance coordination with convention synchronization  
-🔄 AI-powered context curation and optimization
-🔄 Enterprise integration with security and compliance systems
+- Hierarchical context management (team/squad/guild/org)
+- Multi-instance coordination with convention synchronization  
+- AI-powered context curation and optimization
+- Enterprise integration with security and compliance systems
 ```
 
 ---
