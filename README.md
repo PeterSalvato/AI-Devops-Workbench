@@ -2,9 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Production Ready](https://img.shields.io/badge/Status-Production%20Ready-brightgreen.svg)](https://github.com/PeterSalvato/AI-DevOps-Workbench) [![Repository Audit](https://img.shields.io/badge/Repository%20Audit-A%2B%20Grade-brightgreen.svg)](FRAMEWORK_AUDIT_REPORT.md) [![Built with Claude Code](https://img.shields.io/badge/Built%20with-Claude%20Code-blue.svg)](https://claude.ai/code) [![Enterprise Ready](https://img.shields.io/badge/Enterprise-Ready-purple.svg)](ENTERPRISE_GOVERNANCE_BREAKTHROUGH.md)
 
-**The first integrated AI development system with persistent institutional memory, multi-agent coordination, and enterprise governance.**
+**An integrated AI development system with persistent institutional memory, multi-agent coordination, and enterprise governance.**
 
-## Three Integrated Breakthroughs
+## Three Integrated Capabilities
 
 ### **Multi-Agent Coordination**
 Claude embodies expert teams working together systematically:
@@ -76,16 +76,91 @@ User approval workflows and systematic decision tracking:
 
 ---
 
-## Quick Start: Enterprise Deployment
+## Enterprise Deployment Options
+
+### **Option 1: Test Drive (No Local Setup Required)**
+Perfect for evaluating the workbench before enterprise integration:
 
 ```bash
-# 5-minute setup
+# Fork/clone repo to GitHub
+git clone https://github.com/PeterSalvato/AI-DevOps-Workbench my-development-ai
+
+# Open in GitHub Codespace or preferred cloud IDE
+# Install Claude Code within the container:
+npm install -g @anthropic/claude-code
+
+# Claude automatically loads CLAUDE.md and becomes your coordinated development team
+```
+
+### **Option 2: Local Enterprise Installation**
+For teams ready to integrate directly:
+
+```bash
+# Install Claude Code globally
+npm install -g @anthropic/claude-code
+
+# Clone and setup workbench
 git clone https://github.com/PeterSalvato/AI-DevOps-Workbench my-development-ai
 cd my-development-ai
 
-# Claude automatically loads CLAUDE.md and becomes your coordinated development team
-# Natural interaction - AI learns and applies your decisions:
+# Ready for immediate use
+```
 
+### **Option 3: Containerized/Airgapped Deployment**
+**Secure enterprise pattern with selective codebase access:**
+
+```bash
+# Clone repo
+git clone https://github.com/PeterSalvato/AI-DevOps-Workbench my-development-ai
+cd my-development-ai
+
+# Setup devcontainer or custom container
+# Install Claude Code within container environment
+# Configure selective directory mounting (see Security Models below)
+```
+
+### **Flexible Security Models**
+
+**Full Integration**: Complete codebase access for permissive environments
+```bash
+# Mount entire codebase - full AI assistance
+docker run -v $(pwd):/workspace ai-devops-workbench
+```
+
+**Selective Access**: Mount only specific directories
+```bash
+# Example: Frontend-only access, protect backend/database logic
+docker run -v $(pwd)/frontend:/workspace/frontend \
+           -v $(pwd)/docs:/workspace/docs \
+           ai-devops-workbench
+```
+
+**Airgapped Consultation**: Zero direct codebase access
+```bash
+# AI runs in isolated environment
+# Developers manually share specific files/snippets for analysis
+# Institutional memory and conventions stay within controlled environment
+docker run --network none ai-devops-workbench
+```
+
+### **Real-World Enterprise Example**
+*Protecting valuable SQL queries and business logic:*
+
+```markdown
+## CLAUDE.md Configuration
+## RESTRICTED AREAS
+- `/backend/vb/` and `/database/` directories are OFF-LIMITS
+- SQL queries and VB.NET logic are proprietary - do not access or modify
+- Focus on frontend optimization, UI/UX improvements, client-side functionality
+- When backend integration needed, provide interface specifications only
+```
+
+**Result**: AI assists with HTML/SCSS/JS while keeping competitive advantages completely protected.
+
+### **Natural Interaction Examples**
+Once deployed, your development team interacts naturally:
+
+```
 "Build JWT authentication with 2FA" 
 → Multi-agent analysis → Options presented → You decide → Decision saved
 
@@ -121,11 +196,11 @@ cd my-development-ai
 
 ## System Capabilities & Evidence
 
-### **Deep Dives into Each Breakthrough**
+### **Deep Dives into Each Capability**
 - **[→ Institutional Knowledge Power](INSTITUTIONAL_KNOWLEDGE_POWER.md)**: How persistent context transforms AI development
-- **[→ Enterprise Governance Breakthrough](ENTERPRISE_GOVERNANCE_BREAKTHROUGH.md)**: Systematic control and audit capabilities  
-- **[→ Context Management Innovation](CONTEXT_MANAGEMENT_INNOVATION.md)**: Technical breakthrough in AI context handling
-- **[→ Complete System Demonstrations](BREAKTHROUGH_DEMOS.md)**: All three breakthroughs working together
+- **[→ Enterprise Governance](ENTERPRISE_GOVERNANCE_BREAKTHROUGH.md)**: Systematic control and audit capabilities  
+- **[→ Context Management Innovation](CONTEXT_MANAGEMENT_INNOVATION.md)**: Technical innovation in AI context handling
+- **[→ Complete System Demonstrations](BREAKTHROUGH_DEMOS.md)**: All three capabilities working together
 
 ### **System Validation & Audit**
 - **[Framework Audit Report](FRAMEWORK_AUDIT_REPORT.md)**: Independent assessment (A-grade, production-ready)
@@ -161,8 +236,8 @@ cd my-development-ai
 ### **Repository Audit: A+ Grade (94%)**
 - **Functionality-Documentation Alignment**: 95% - Documentation precisely matches capabilities
 - **Enterprise Readiness**: 91% - Production-ready with governance controls  
-- **Innovation Communication**: 97% - Triple breakthrough clearly articulated
-- **Market Position**: "First integrated AI development system with persistent institutional memory"
+- **Innovation Communication**: 97% - System capabilities clearly articulated
+- **Market Position**: "Integrated AI development system with persistent institutional memory"
 
 **[→ View Complete Audit Report](FRAMEWORK_AUDIT_REPORT.md)**
 
@@ -192,7 +267,7 @@ cd my-development-ai
 ## Documentation & Learning Resources
 
 ### **Getting Started**
-- **[Breakthrough Demonstrations](BREAKTHROUGH_DEMOS.md)**: See all capabilities working together
+- **[System Demonstrations](BREAKTHROUGH_DEMOS.md)**: See all capabilities working together
 - **[Quick Start Validation](QUICK_START_VALIDATION.md)**: 15-minute trial deployment
 - **[Implementation Playbook](IMPLEMENTATION_PLAYBOOK.md)**: Complete deployment guide
 
@@ -208,7 +283,7 @@ cd my-development-ai
 
 ---
 
-## Why This Matters: The Institutional Memory Revolution
+## Why This Matters: Persistent Institutional Memory
 
 **Traditional AI Development**: Every session is isolated, no organizational learning, inconsistent outputs
 
@@ -216,14 +291,14 @@ cd my-development-ai
 
 **The Result**: Move from ad-hoc "vibecoding" to systematic development engineering with governance, memory, and multi-expert coordination.
 
-**Enterprise Value**: First AI development system designed for organizational deployment with persistent memory, systematic governance, and coordinated multi-agent analysis.
+**Enterprise Value**: AI development system designed for organizational deployment with persistent memory, systematic governance, and coordinated multi-agent analysis.
 
 ---
 
 ## LLM Independence & Strategic Flexibility
 
 ### **Architecture Designed for LLM Portability**
-The core breakthrough - persistent institutional memory - is LLM-agnostic by design:
+The core capability - persistent institutional memory - is LLM-agnostic by design:
 
 - **Context files are standard markdown** - readable by any capable AI system
 - **Team conventions work with any LLM** - GPT-4, Claude, Gemini, or future models
