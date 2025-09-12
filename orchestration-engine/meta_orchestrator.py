@@ -189,6 +189,41 @@ class DevelopmentMetaOrchestrator:
                 required_sections = ['agent_identity', 'input_schema', 'output_schema', 'orchestration_integration']
                 if all(section in agent_data for section in required_sections):
                     agent_name = agent_data['agent_identity']['name']
+                    
+                    # Transform orchestration_integration to expected format
+                    orchestration = agent_data.get('orchestration_integration', {})
+                    
+                    # Extract supported patterns from actual agent structure
+                    supported_patterns = []
+                    if 'sequential_workflow' in orchestration:
+                        supported_patterns.append('sequential')
+                    if 'parallel_collaboration' in orchestration:
+                        supported_patterns.append('mapreduce')
+                        supported_patterns.append('consensus')
+                    if 'hierarchical_coordination' in orchestration:
+                        supported_patterns.append('hierarchical')
+                    
+                    # Add normalized orchestration data
+                    agent_data['orchestration_integration']['supported_patterns'] = supported_patterns
+                    
+                    # Extract development workflows from agent structure
+                    development_workflows = {}
+                    if 'sequential_workflow' in orchestration:
+                        development_workflows['sequential_implementation'] = orchestration['sequential_workflow']
+                    if 'parallel_collaboration' in orchestration:
+                        development_workflows['collaborative_analysis'] = orchestration['parallel_collaboration']
+                    
+                    agent_data['orchestration_integration']['development_workflows'] = development_workflows
+                    
+                    # Extract coordination capabilities
+                    coordination_capabilities = {
+                        'can_lead': 'hierarchical_coordination' in orchestration,
+                        'can_collaborate': 'parallel_collaboration' in orchestration,
+                        'can_sequence': 'sequential_workflow' in orchestration,
+                        'specialization': agent_data.get('agent_identity', {}).get('methodology', 'general')
+                    }
+                    agent_data['orchestration_integration']['coordination_capabilities'] = coordination_capabilities
+                    
                     compatible_agents[agent_name] = agent_data
                     logger.info(f"Validated enhanced agent: {agent_name}")
                 else:
