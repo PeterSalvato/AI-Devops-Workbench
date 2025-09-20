@@ -119,34 +119,165 @@ const developmentResults = {
 await enforcer.completeDevelopmentCycle(developmentResults);
 ```
 
-## TOOL INTEGRATION
+## CORE FILE MASTERY
 
-### Read Files
-Always check current state:
+### conventions.md Search Patterns
+Essential grep patterns for finding existing decisions:
 ```bash
-cat project-memory/conventions.md  # Check existing decisions
-cat project-memory/symbol-index.md # Check current system structure
+# Search by technology type
+grep -i "authentication\|auth\|login" project-memory/conventions.md
+grep -i "database\|db\|postgres\|mysql" project-memory/conventions.md
+grep -i "frontend\|react\|vue\|angular" project-memory/conventions.md
+grep -i "api\|endpoint\|rest\|graphql" project-memory/conventions.md
+
+# Search by decision scope
+grep -A 3 -B 1 "Apply To" project-memory/conventions.md
+grep -A 2 "**Standard**:" project-memory/conventions.md
+
+# Find recent decisions
+grep -A 5 "$(date +%Y-%m)" project-memory/conventions.md
 ```
 
-### Use CLI Tools Actively
+### symbol-index.md Quick Reference
+Essential commands for symbol index navigation:
 ```bash
-# Check system health
-npm run validate
+# Find functions by name pattern
+grep -A 2 "### [A-Z]" project-memory/symbol-index.md
 
-# Find inconsistencies  
+# Find connections between components
+grep -A 1 "**From:**" project-memory/symbol-index.md
+
+# Find patterns by type
+grep -A 3 "**Pattern:**" project-memory/symbol-index.md
+
+# Check for stale references
+grep -o "src/[^)]*" project-memory/symbol-index.md | sort -u
+```
+
+### Core File Health Commands
+Quick diagnostic checks for the two sacred files:
+```bash
+# Validate conventions.md structure
+grep -c "**Decision Made**" project-memory/conventions.md
+grep -c "**Standard**:" project-memory/conventions.md
+
+# Validate symbol-index.md completeness
+grep -c "### " project-memory/symbol-index.md
+grep -c "**From:**" project-memory/symbol-index.md
+
+# Check for file integrity
+npm run validate
 npm run drift
-
-# Capture decisions
-memory-enforce decision --title "..." --standard "..." --rationale "..." --scope "..."
-
-# Document patterns
-memory-enforce pattern --name "..." --description "..." --usage "..."
 ```
 
-### Validate Changes
+### Decision Templates
+Copy-paste ready formats for conventions.md:
+
+**Technology Choice Template:**
+```markdown
+### [Technology Category] Decision
+**Decision Made**: [Date] - [Technology Name]
+**Standard**: [Specific technology/approach chosen]
+**Rationale**: [Why this choice over alternatives]
+**Apply To**: [Scope of application]
+**Dependencies**: [Required tools/libraries]
+**Migration**: [How to adopt in existing code]
+```
+
+**Architecture Pattern Template:**
+```markdown
+### [Pattern Name] Architecture
+**Decision Made**: [Date] - [Pattern approach]
+**Standard**: [How to implement this pattern]
+**Rationale**: [Benefits and reasoning]
+**Apply To**: [Where this pattern should be used]
+**Examples**: [Code examples or references]
+**Alternatives Rejected**: [What we considered but didn't choose]
+```
+
+**Security Standard Template:**
+```markdown
+### [Security Domain] Requirements
+**Decision Made**: [Date] - [Security approach]
+**Standard**: [Specific security requirements]
+**Implementation**: [How to implement securely]
+**Apply To**: [What components this covers]
+**Compliance**: [Regulatory/company requirements met]
+**Validation**: [How to verify compliance]
+```
+
+### Symbol-Index Update Templates
+Copy-paste ready formats for symbol-index.md:
+
+**Function Documentation Template:**
+```markdown
+### [FunctionName]
+**File**: [path/to/file.js]:[lineNumber]
+**Purpose**: [What this function does]
+**Parameters**: [Input parameters and types]
+**Returns**: [What it returns]
+**Dependencies**: [What it depends on]
+**Used By**: [What calls this function]
+**Added**: [Date] - [Context/Feature]
+```
+
+**Component Connection Template:**
+```markdown
+### [ComponentA] → [ComponentB] Integration
+**From**: [Source component/file]
+**To**: [Destination component/file]
+**Type**: [API call, data flow, event, etc.]
+**Purpose**: [Why this connection exists]
+**Data**: [What data flows through]
+**Added**: [Date] - [Context/Feature]
+```
+
+**Pattern Documentation Template:**
+```markdown
+### [Pattern Name] Pattern
+**Discovered**: [Date] - [Context where found]
+**Pattern**: [Description of the pattern]
+**Usage**: [When to apply this pattern]
+**Examples**: [Where it's used in codebase]
+**Benefits**: [Why this pattern is valuable]
+**Integration Points**: [How it connects to other patterns]
+```
+
+### Core File Workflow Enhancement
+Enhanced decision capture process:
+
+**Step 1: Smart Search Before Asking**
 ```bash
-# After any institutional memory updates
-npm run validate
+# Use multiple search patterns before declaring "not found"
+grep -i "auth" project-memory/conventions.md
+grep -i "login\|signin\|credential" project-memory/conventions.md
+grep -i "security\|token\|session" project-memory/conventions.md
+
+# Check related decisions that might apply
+grep -B 2 -A 5 "user\|access\|permission" project-memory/conventions.md
+```
+
+**Step 2: Contextual Decision Capture**
+```javascript
+// Enhanced decision context gathering
+const context = {
+  related_decisions: await findRelatedDecisions(decisionType),
+  existing_patterns: await findRelevantPatterns(decisionType),
+  scope_analysis: await analyzeScopeOverlap(decisionType, userContext)
+};
+
+// Use think tool for better question generation
+const reasoning = this.thinkTool.reasonAboutDecision(decisionType, [], context);
+```
+
+**Step 3: Symbol Index Auto-Update Priority**
+```javascript
+// Prioritize symbol index updates by impact
+const updatePriority = {
+  high: ['new architectural components', 'cross-service integrations'],
+  medium: ['utility functions', 'data transformations'],
+  low: ['helper functions', 'local utilities']
+};
 ```
 
 ## EXAMPLE INTERACTION

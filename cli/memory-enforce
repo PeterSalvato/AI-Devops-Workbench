@@ -351,4 +351,181 @@ program
     }
   });
 
+// Search command - find existing decisions in conventions.md
+program
+  .command('search')
+  .description('Search for existing decisions in conventions.md')
+  .argument('<query>', 'search term or pattern')
+  .option('-e, --exact', 'exact match instead of pattern matching')
+  .option('-s, --section <section>', 'search within specific section')
+  .action(async (query, options) => {
+    console.log(chalk.blue(`🔍 Searching conventions.md for: "${query}"\n`));
+
+    try {
+      const searchResults = await enforcer.searchConventions(query, {
+        exact: options.exact,
+        section: options.section
+      });
+
+      if (searchResults.length === 0) {
+        console.log(chalk.yellow('❓ No existing decisions found for this query'));
+        console.log(chalk.gray('\nSuggested search alternatives:'));
+        const suggestions = await enforcer.generateSearchSuggestions(query);
+        suggestions.forEach(suggestion => {
+          console.log(chalk.gray(`  • ${suggestion}`));
+        });
+      } else {
+        console.log(chalk.green(`✅ Found ${searchResults.length} related decision(s):\n`));
+        searchResults.forEach((result, index) => {
+          console.log(chalk.cyan(`${index + 1}. ${result.title}`));
+          console.log(chalk.gray(`   Standard: ${result.standard}`));
+          console.log(chalk.gray(`   Scope: ${result.scope}`));
+          console.log('');
+        });
+      }
+
+    } catch (error) {
+      console.error(chalk.red('❌ Search failed:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+// Index command - navigate and query symbol-index.md
+program
+  .command('index')
+  .description('Query and navigate symbol-index.md')
+  .option('-f, --functions [pattern]', 'list functions matching pattern')
+  .option('-c, --connections [component]', 'show connections for component')
+  .option('-p, --patterns', 'list discovered patterns')
+  .option('--stats', 'show symbol index statistics')
+  .action(async (options) => {
+    console.log(chalk.blue('🔍 Querying symbol index...\n'));
+
+    try {
+      if (options.stats) {
+        const stats = await enforcer.getSymbolIndexStats();
+        console.log(chalk.cyan('📊 Symbol Index Statistics:'));
+        console.log(chalk.gray(`  Functions: ${stats.functions}`));
+        console.log(chalk.gray(`  Connections: ${stats.connections}`));
+        console.log(chalk.gray(`  Patterns: ${stats.patterns}`));
+        console.log(chalk.gray(`  Last Updated: ${stats.lastUpdated}`));
+        return;
+      }
+
+      if (options.functions !== undefined) {
+        const functions = await enforcer.queryFunctions(options.functions || '');
+        console.log(chalk.green(`📋 Functions${options.functions ? ` matching "${options.functions}"` : ''}:`));
+        functions.forEach(func => {
+          console.log(chalk.cyan(`  • ${func.name} (${func.file})`));
+          console.log(chalk.gray(`    ${func.purpose}`));
+        });
+      }
+
+      if (options.connections !== undefined) {
+        const connections = await enforcer.queryConnections(options.connections || '');
+        console.log(chalk.green(`🔗 Connections${options.connections ? ` for "${options.connections}"` : ''}:`));
+        connections.forEach(conn => {
+          console.log(chalk.cyan(`  • ${conn.from} → ${conn.to}`));
+          console.log(chalk.gray(`    ${conn.purpose} (${conn.type})`));
+        });
+      }
+
+      if (options.patterns) {
+        const patterns = await enforcer.queryPatterns();
+        console.log(chalk.green('🎯 Discovered Patterns:'));
+        patterns.forEach(pattern => {
+          console.log(chalk.cyan(`  • ${pattern.name}`));
+          console.log(chalk.gray(`    ${pattern.description}`));
+          console.log(chalk.gray(`    Usage: ${pattern.usage}`));
+        });
+      }
+
+      if (!options.functions && !options.connections && !options.patterns && !options.stats) {
+        console.log(chalk.yellow('❓ Please specify what to query:'));
+        console.log(chalk.gray('  --functions [pattern]  - List functions'));
+        console.log(chalk.gray('  --connections [comp]   - Show connections'));
+        console.log(chalk.gray('  --patterns            - List patterns'));
+        console.log(chalk.gray('  --stats               - Show statistics'));
+      }
+
+    } catch (error) {
+      console.error(chalk.red('❌ Index query failed:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+// Core command - focus on core file health and utilities
+program
+  .command('core')
+  .description('Core file utilities for conventions.md and symbol-index.md')
+  .option('--health', 'check core file health')
+  .option('--template <type>', 'show template for decision type')
+  .option('--conflicts', 'detect decision conflicts')
+  .option('--orphans', 'find orphaned symbol references')
+  .action(async (options) => {
+    if (options.health) {
+      console.log(chalk.blue('🏥 Core File Health Check...\n'));
+
+      const conventionsHealth = await enforcer.checkConventionsHealth();
+      const symbolIndexHealth = await enforcer.checkSymbolIndexHealth();
+
+      console.log(chalk.cyan('📋 conventions.md:'));
+      console.log(chalk.gray(`  Decisions: ${conventionsHealth.decisions}`));
+      console.log(chalk.gray(`  Sections: ${conventionsHealth.sections}`));
+      console.log(chalk.gray(`  Recent Activity: ${conventionsHealth.recentActivity}`));
+
+      console.log(chalk.cyan('\n🔗 symbol-index.md:'));
+      console.log(chalk.gray(`  Functions: ${symbolIndexHealth.functions}`));
+      console.log(chalk.gray(`  Connections: ${symbolIndexHealth.connections}`));
+      console.log(chalk.gray(`  Patterns: ${symbolIndexHealth.patterns}`));
+      console.log(chalk.gray(`  Stale References: ${symbolIndexHealth.staleReferences}`));
+    }
+
+    if (options.template) {
+      const template = await enforcer.getDecisionTemplate(options.template);
+      console.log(chalk.blue(`📝 Template for ${options.template}:\n`));
+      console.log(template);
+    }
+
+    if (options.conflicts) {
+      console.log(chalk.blue('⚔️  Checking for decision conflicts...\n'));
+      const conflicts = await enforcer.detectDecisionConflicts();
+
+      if (conflicts.length === 0) {
+        console.log(chalk.green('✅ No conflicts detected'));
+      } else {
+        console.log(chalk.yellow(`⚠️  Found ${conflicts.length} potential conflict(s):`));
+        conflicts.forEach(conflict => {
+          console.log(chalk.red(`  • ${conflict.decision1.title} vs ${conflict.decision2.title}`));
+          console.log(chalk.gray(`    Overlap: ${conflict.reason}`));
+        });
+      }
+    }
+
+    if (options.orphans) {
+      console.log(chalk.blue('🔍 Finding orphaned symbol references...\n'));
+      const orphans = await enforcer.findOrphanedReferences();
+
+      if (orphans.length === 0) {
+        console.log(chalk.green('✅ No orphaned references found'));
+      } else {
+        console.log(chalk.yellow(`⚠️  Found ${orphans.length} orphaned reference(s):`));
+        orphans.forEach(orphan => {
+          console.log(chalk.red(`  • ${orphan.reference} (${orphan.type})`));
+          console.log(chalk.gray(`    Found in: ${orphan.location}`));
+        });
+      }
+    }
+
+    if (!options.health && !options.template && !options.conflicts && !options.orphans) {
+      console.log(chalk.yellow('❓ Please specify a core file utility:'));
+      console.log(chalk.gray('  --health              - Check core file health'));
+      console.log(chalk.gray('  --template <type>     - Show decision template'));
+      console.log(chalk.gray('  --conflicts          - Detect conflicts'));
+      console.log(chalk.gray('  --orphans            - Find orphaned references'));
+    }
+  });
+
 program.parse();

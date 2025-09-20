@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const ThinkTool = require('./think-tool.js');
 
 class InstitutionalMemoryEnforcer {
   constructor(projectRoot = process.cwd()) {
@@ -14,6 +15,7 @@ class InstitutionalMemoryEnforcer {
     this.conventionsPath = path.join(projectRoot, 'project-memory', 'conventions.md');
     this.symbolIndexPath = path.join(projectRoot, 'project-memory', 'symbol-index.md');
     this.enforcementLog = [];
+    this.thinkTool = new ThinkTool();
   }
 
   /**
@@ -40,26 +42,45 @@ class InstitutionalMemoryEnforcer {
 
   /**
    * MANDATORY CONVENTION CHECK WORKFLOW
-   * Step 1: Check if decisions already exist
+   * Step 1: Check if decisions already exist (with structured reasoning)
    */
   async checkForExistingDecision(decisionType, context = {}) {
     const conventions = await this.parseConventions();
     const matchingDecisions = this.findMatchingDecisions(conventions, decisionType, context);
-    
-    if (matchingDecisions.length > 0) {
+
+    // Use think tool for structured reasoning
+    const reasoning = this.thinkTool.reasonAboutDecision(decisionType, matchingDecisions, context);
+
+    if (reasoning.action === 'resolve_conflicts') {
+      this.log(`⚠️ CONFLICTS DETECTED for ${decisionType} - requires resolution`);
+      return {
+        found: true,
+        has_conflicts: true,
+        conflicts: reasoning.conflicts,
+        resolution_required: true
+      };
+    }
+
+    if (reasoning.action === 'use_existing') {
       this.log(`✅ Found existing decision for ${decisionType}`);
       return {
         found: true,
         decisions: matchingDecisions,
-        convention: matchingDecisions[0] // Use most recent/specific
+        convention: matchingDecisions[0], // Use most recent/specific
+        reasoning_summary: this.thinkTool.getReasoningSummary()
       };
     }
-    
-    this.log(`❓ No existing decision found for ${decisionType}`);
-    return {
-      found: false,
-      requiredQuestions: this.generateConventionQuestions(decisionType, context)
-    };
+
+    if (reasoning.action === 'capture_decision') {
+      this.log(`❓ No existing decision found for ${decisionType}`);
+      return {
+        found: false,
+        requiredQuestions: {
+          questions: reasoning.questions,
+          reasoning_context: this.thinkTool.getReasoningSummary()
+        }
+      };
+    }
   }
 
   /**
@@ -100,35 +121,53 @@ class InstitutionalMemoryEnforcer {
    */
   async updateSymbolIndexAfterDevelopment(developmentResults) {
     const timestamp = new Date().toISOString().split('T')[0];
-    
+
+    // Use think tool for structured reasoning about the update
+    const reasoning = this.thinkTool.reasonAboutSymbolUpdate(
+      developmentResults.newFunctions || [],
+      developmentResults.newConnections || [],
+      developmentResults.context || {}
+    );
+
+    this.log(`🤔 Symbol update reasoning: ${reasoning.patterns_to_document.length} patterns detected`);
+
     // Process new functions
     if (developmentResults.newFunctions && developmentResults.newFunctions.length > 0) {
       for (const func of developmentResults.newFunctions) {
         await this.addFunctionToSymbolIndex(func, timestamp);
       }
     }
-    
+
     // Process new integrations/connections
     if (developmentResults.newConnections && developmentResults.newConnections.length > 0) {
       for (const connection of developmentResults.newConnections) {
         await this.addConnectionToSymbolIndex(connection, timestamp);
       }
     }
-    
-    // Process discovered patterns
+
+    // Capture patterns discovered by think tool reasoning
+    if (reasoning.patterns_to_document && reasoning.patterns_to_document.length > 0) {
+      for (const pattern of reasoning.patterns_to_document) {
+        await this.captureNewPattern(pattern);
+      }
+    }
+
+    // Process explicitly provided patterns
     if (developmentResults.discoveredPatterns && developmentResults.discoveredPatterns.length > 0) {
       for (const pattern of developmentResults.discoveredPatterns) {
         await this.captureNewPattern(pattern);
       }
     }
-    
+
     this.log(`✅ Symbol index updated with ${developmentResults.newFunctions?.length || 0} functions, ${developmentResults.newConnections?.length || 0} connections`);
-    
+
     return {
       updated: true,
       functionsAdded: developmentResults.newFunctions?.length || 0,
       connectionsAdded: developmentResults.newConnections?.length || 0,
-      patternsAdded: developmentResults.discoveredPatterns?.length || 0
+      patternsAdded: (reasoning.patterns_to_document?.length || 0) + (developmentResults.discoveredPatterns?.length || 0),
+      reasoning_summary: this.thinkTool.getReasoningSummary(),
+      impact_assessment: reasoning.impact_assessment
     };
   }
 
@@ -222,15 +261,17 @@ class InstitutionalMemoryEnforcer {
    */
   async detectDrift() {
     const driftIssues = [];
-    
+
     // Check for outdated file references
     const symbolIndex = await this.parseSymbolIndex();
     const invalidReferences = await this.validateCodeReferences(symbolIndex);
     if (invalidReferences.length > 0) {
       driftIssues.push({
         type: 'INVALID_CODE_REFERENCES',
+        severity: 'critical',
         count: invalidReferences.length,
-        details: invalidReferences
+        details: invalidReferences,
+        impact: invalidReferences.length * 2
       });
     }
 
@@ -240,8 +281,10 @@ class InstitutionalMemoryEnforcer {
     if (staleConventions.length > 0) {
       driftIssues.push({
         type: 'STALE_CONVENTIONS',
+        severity: 'warning',
         count: staleConventions.length,
-        details: staleConventions
+        details: staleConventions,
+        impact: staleConventions.length
       });
     }
 
@@ -250,14 +293,29 @@ class InstitutionalMemoryEnforcer {
     if (!conflicts.passed) {
       driftIssues.push({
         type: 'CONVENTION_CONFLICTS',
-        details: conflicts.conflicts
+        severity: 'critical',
+        details: conflicts.conflicts,
+        impact: conflicts.conflicts.length * 3
       });
     }
+
+    // Use think tool for structured reasoning about drift
+    const driftReport = {
+      driftDetected: driftIssues.length > 0,
+      issues: driftIssues
+    };
+
+    const reasoning = this.thinkTool.reasonAboutDrift(driftReport);
+
+    this.log(`🤔 Drift analysis: ${reasoning.requires_immediate_action ? 'CRITICAL' : 'OK'} - ${reasoning.resolution_plan.length} steps needed`);
 
     return {
       driftDetected: driftIssues.length > 0,
       issues: driftIssues,
-      recommendedActions: this.generateDriftActions(driftIssues)
+      reasoning_analysis: reasoning,
+      recommendedActions: reasoning.resolution_plan,
+      estimated_effort_minutes: reasoning.estimated_effort,
+      reasoning_summary: this.thinkTool.getReasoningSummary()
     };
   }
 
@@ -681,10 +739,10 @@ ${decision.details || ''}
   formatPatternEntry(pattern, timestamp) {
     return `
 ### ${pattern.name}
-**Discovered**: ${timestamp} (${pattern.context})  
-**Pattern**: ${pattern.description}  
-**Usage**: ${pattern.usage}  
-**Integration Points**: ${pattern.integrations.join(', ')}  
+**Discovered**: ${timestamp}${pattern.context ? ` (${pattern.context})` : ''}
+**Pattern**: ${pattern.description}
+**Usage**: ${pattern.usage}
+**Integration Points**: ${pattern.integrations ? pattern.integrations.join(', ') : 'N/A'}
 `;
   }
 
@@ -700,6 +758,313 @@ ${decision.details || ''}
     const timestamp = new Date().toISOString();
     this.enforcementLog.push({ timestamp, message });
     console.log(`[${timestamp}] ${message}`);
+  }
+
+  /**
+   * CORE FILE UTILITY METHODS
+   * Methods to support enhanced CLI commands focusing on core files
+   */
+
+  async searchConventions(query, options = {}) {
+    const conventions = await this.parseConventions();
+    const results = [];
+
+    for (const decision of conventions) {
+      let matches = false;
+
+      if (options.exact) {
+        matches = decision.title?.toLowerCase() === query.toLowerCase() ||
+                 decision.standard?.toLowerCase() === query.toLowerCase();
+      } else {
+        const searchPattern = new RegExp(query, 'i');
+        matches = searchPattern.test(decision.title) ||
+                 searchPattern.test(decision.standard) ||
+                 searchPattern.test(decision.rationale) ||
+                 searchPattern.test(decision.scope);
+      }
+
+      if (matches) {
+        results.push(decision);
+      }
+    }
+
+    return results;
+  }
+
+  async generateSearchSuggestions(query) {
+    const commonTerms = {
+      'auth': ['authentication', 'login', 'security', 'token', 'session'],
+      'db': ['database', 'postgres', 'mysql', 'storage', 'data'],
+      'api': ['endpoint', 'rest', 'graphql', 'service', 'http'],
+      'front': ['frontend', 'react', 'vue', 'angular', 'ui'],
+      'test': ['testing', 'jest', 'cypress', 'unit', 'integration']
+    };
+
+    const suggestions = [];
+    const lowerQuery = query.toLowerCase();
+
+    // Find related terms
+    for (const [key, terms] of Object.entries(commonTerms)) {
+      if (lowerQuery.includes(key) || terms.some(term => term.includes(lowerQuery))) {
+        suggestions.push(...terms);
+      }
+    }
+
+    // Add generic suggestions if no specific matches
+    if (suggestions.length === 0) {
+      suggestions.push('authentication', 'database', 'frontend', 'api', 'testing');
+    }
+
+    return [...new Set(suggestions)].slice(0, 5);
+  }
+
+  async getSymbolIndexStats() {
+    const content = fs.readFileSync(this.symbolIndexPath, 'utf8');
+
+    // Count different types of entries by pattern matching
+    const functions = (content.match(/^### [A-Z]/gm) || []).length;
+    const connections = (content.match(/\*\*From:\*\*/gm) || []).length;
+    const patterns = (content.match(/\*\*Pattern:\*\*/gm) || []).length;
+
+    const stats = fs.statSync(this.symbolIndexPath);
+
+    return {
+      functions,
+      connections,
+      patterns,
+      lastUpdated: stats.mtime.toISOString().split('T')[0]
+    };
+  }
+
+  async queryFunctions(pattern = '') {
+    const content = fs.readFileSync(this.symbolIndexPath, 'utf8');
+    const functions = [];
+
+    // Parse function entries from symbol index
+    const functionMatches = content.match(/^### ([^\n]+)\n\*\*File:\*\* ([^\n]+)\n\*\*Purpose:\*\* ([^\n]+)/gm);
+
+    if (functionMatches) {
+      for (const match of functionMatches) {
+        const lines = match.split('\n');
+        const name = lines[0].replace('### ', '');
+        const file = lines[1].replace('**File:** ', '');
+        const purpose = lines[2].replace('**Purpose:** ', '');
+        functions.push({ name, file, purpose });
+      }
+    }
+
+    if (!pattern) return functions;
+
+    const searchPattern = new RegExp(pattern, 'i');
+    return functions.filter(func =>
+      searchPattern.test(func.name) ||
+      searchPattern.test(func.file) ||
+      searchPattern.test(func.purpose)
+    );
+  }
+
+  async queryConnections(component = '') {
+    const content = fs.readFileSync(this.symbolIndexPath, 'utf8');
+    const connections = [];
+
+    // Parse connection entries from symbol index
+    const connectionMatches = content.match(/\*\*From:\*\* ([^\n]+)\n\*\*To:\*\* ([^\n]+)\n\*\*Type:\*\* ([^\n]+)\n\*\*Purpose:\*\* ([^\n]+)/gm);
+
+    if (connectionMatches) {
+      for (const match of connectionMatches) {
+        const lines = match.split('\n');
+        const from = lines[0].replace('**From:** ', '');
+        const to = lines[1].replace('**To:** ', '');
+        const type = lines[2].replace('**Type:** ', '');
+        const purpose = lines[3].replace('**Purpose:** ', '');
+        connections.push({ from, to, type, purpose });
+      }
+    }
+
+    if (!component) return connections;
+
+    const searchPattern = new RegExp(component, 'i');
+    return connections.filter(conn =>
+      searchPattern.test(conn.from) ||
+      searchPattern.test(conn.to) ||
+      searchPattern.test(conn.purpose)
+    );
+  }
+
+  async queryPatterns() {
+    const content = fs.readFileSync(this.symbolIndexPath, 'utf8');
+    const patterns = [];
+
+    // Parse pattern entries from symbol index
+    const patternMatches = content.match(/### ([^\n]+) Pattern\n\*\*Discovered:\*\* ([^\n]+)\n\*\*Pattern:\*\* ([^\n]+)\n\*\*Usage:\*\* ([^\n]+)/gm);
+
+    if (patternMatches) {
+      for (const match of patternMatches) {
+        const lines = match.split('\n');
+        const name = lines[0].replace('### ', '').replace(' Pattern', '');
+        const discovered = lines[1].replace('**Discovered:** ', '');
+        const description = lines[2].replace('**Pattern:** ', '');
+        const usage = lines[3].replace('**Usage:** ', '');
+        patterns.push({ name, discovered, description, usage });
+      }
+    }
+
+    return patterns;
+  }
+
+  async checkConventionsHealth() {
+    const conventions = await this.parseConventions();
+    const content = fs.readFileSync(this.conventionsPath, 'utf8');
+
+    const decisions = conventions.length;
+    const sections = (content.match(/^## /gm) || []).length;
+    const recentActivity = this.checkRecentActivity(content);
+
+    return { decisions, sections, recentActivity };
+  }
+
+  async checkSymbolIndexHealth() {
+    const content = fs.readFileSync(this.symbolIndexPath, 'utf8');
+
+    // Count different types of entries by pattern matching
+    const functions = (content.match(/^### [A-Z]/gm) || []).length;
+    const connections = (content.match(/\*\*From:\*\*/gm) || []).length;
+    const patterns = (content.match(/\*\*Pattern:\*\*/gm) || []).length;
+
+    // Check for stale references (simplified)
+    const staleReferences = await this.countStaleReferences(content);
+
+    return { functions, connections, patterns, staleReferences };
+  }
+
+  checkRecentActivity(content) {
+    const currentMonth = new Date().toISOString().slice(0, 7); // YYYY-MM
+    const lastMonth = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 7);
+
+    const currentMonthMatches = (content.match(new RegExp(currentMonth, 'g')) || []).length;
+    const lastMonthMatches = (content.match(new RegExp(lastMonth, 'g')) || []).length;
+
+    if (currentMonthMatches > 0) return 'This month';
+    if (lastMonthMatches > 0) return 'Last month';
+    return 'Older than 1 month';
+  }
+
+  async countStaleReferences(content) {
+    // Simplified stale reference detection
+    const fileReferences = content.match(/src\/[^)\s]*/g) || [];
+    let staleCount = 0;
+
+    for (const ref of fileReferences) {
+      try {
+        if (!fs.existsSync(ref)) {
+          staleCount++;
+        }
+      } catch (error) {
+        // Ignore errors for now
+      }
+    }
+
+    return staleCount;
+  }
+
+  async getDecisionTemplate(type) {
+    const templates = {
+      'technology': `### [Technology Category] Decision
+**Decision Made**: [Date] - [Technology Name]
+**Standard**: [Specific technology/approach chosen]
+**Rationale**: [Why this choice over alternatives]
+**Apply To**: [Scope of application]
+**Dependencies**: [Required tools/libraries]
+**Migration**: [How to adopt in existing code]`,
+
+      'architecture': `### [Pattern Name] Architecture
+**Decision Made**: [Date] - [Pattern approach]
+**Standard**: [How to implement this pattern]
+**Rationale**: [Benefits and reasoning]
+**Apply To**: [Where this pattern should be used]
+**Examples**: [Code examples or references]
+**Alternatives Rejected**: [What we considered but didn't choose]`,
+
+      'security': `### [Security Domain] Requirements
+**Decision Made**: [Date] - [Security approach]
+**Standard**: [Specific security requirements]
+**Implementation**: [How to implement securely]
+**Apply To**: [What components this covers]
+**Compliance**: [Regulatory/company requirements met]
+**Validation**: [How to verify compliance]`
+    };
+
+    return templates[type] || templates['technology'];
+  }
+
+  async detectDecisionConflicts() {
+    const conventions = await this.parseConventions();
+    const conflicts = [];
+
+    for (let i = 0; i < conventions.length; i++) {
+      for (let j = i + 1; j < conventions.length; j++) {
+        const conflict = this.checkConflictBetween(conventions[i], conventions[j]);
+        if (conflict) {
+          conflicts.push({
+            decision1: conventions[i],
+            decision2: conventions[j],
+            reason: conflict
+          });
+        }
+      }
+    }
+
+    return conflicts;
+  }
+
+  checkConflictBetween(decision1, decision2) {
+    // Check for scope overlap with different standards
+    if (decision1.scope && decision2.scope &&
+        decision1.scope === decision2.scope &&
+        decision1.standard !== decision2.standard) {
+      return `Same scope (${decision1.scope}) with different standards`;
+    }
+
+    // Check for similar titles with different approaches
+    if (decision1.title && decision2.title) {
+      const title1Words = decision1.title.toLowerCase().split(' ');
+      const title2Words = decision2.title.toLowerCase().split(' ');
+      const commonWords = title1Words.filter(word => title2Words.includes(word));
+
+      if (commonWords.length >= 2 && decision1.standard !== decision2.standard) {
+        return `Similar decisions with different standards`;
+      }
+    }
+
+    return null;
+  }
+
+  async findOrphanedReferences() {
+    const content = fs.readFileSync(this.symbolIndexPath, 'utf8');
+    const orphans = [];
+
+    // Find file references that don't exist
+    const fileReferences = content.match(/src\/[^)\s]*/g) || [];
+
+    for (const ref of fileReferences) {
+      try {
+        if (!fs.existsSync(ref)) {
+          orphans.push({
+            reference: ref,
+            type: 'file',
+            location: 'symbol-index.md'
+          });
+        }
+      } catch (error) {
+        orphans.push({
+          reference: ref,
+          type: 'invalid_path',
+          location: 'symbol-index.md'
+        });
+      }
+    }
+
+    return orphans;
   }
 
   getFailureReport(checks) {

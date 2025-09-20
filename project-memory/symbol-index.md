@@ -63,3 +63,110 @@
 ---
 
 *This document grows through development work. Each function created, integration built, and pattern discovered gets documented here to maintain institutional knowledge of the codebase structure.*
+### authenticateUser
+- **Location**: `src/auth/auth-service.js:N/A`
+- **Purpose**: Validates user credentials using JWT
+- **Parameters**: See function signature
+- **Returns**: See function documentation
+- **Dependencies**: jsonwebtoken, bcrypt
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### authorizeRequest
+- **Location**: `src/auth/auth-middleware.js:N/A`
+- **Purpose**: Middleware for request authorization
+- **Parameters**: See function signature
+- **Returns**: See function documentation
+- **Dependencies**: auth-service
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### refreshToken
+- **Location**: `src/auth/token-service.js:N/A`
+- **Purpose**: Refreshes expired JWT tokens
+- **Parameters**: See function signature
+- **Returns**: See function documentation
+- **Dependencies**: jsonwebtoken
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### LoginForm → AuthService
+- **Connection Type**: service_call
+- **Purpose**: User login authentication
+- **Data Flow**: See implementation
+- **Dependencies**: Direct connection
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### API Gateway → AuthMiddleware
+- **Connection Type**: service_call
+- **Purpose**: Request authorization check
+- **Data Flow**: See implementation
+- **Dependencies**: Direct connection
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### TokenService → AuthService
+- **Connection Type**: service_call
+- **Purpose**: Token refresh validation
+- **Data Flow**: See implementation
+- **Dependencies**: Direct connection
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### authenticateUser
+- **Location**: `src/auth/auth-service.js:N/A`
+- **Purpose**: Validates user credentials using JWT
+- **Parameters**: See function signature
+- **Returns**: See function documentation
+- **Dependencies**: jsonwebtoken, bcrypt
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### authorizeRequest
+- **Location**: `src/auth/auth-middleware.js:N/A`
+- **Purpose**: Middleware for request authorization
+- **Parameters**: See function signature
+- **Returns**: See function documentation
+- **Dependencies**: auth-service
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### refreshToken
+- **Location**: `src/auth/token-service.js:N/A`
+- **Purpose**: Refreshes expired JWT tokens
+- **Parameters**: See function signature
+- **Returns**: See function documentation
+- **Dependencies**: jsonwebtoken
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### LoginForm → AuthService
+- **Connection Type**: service_call
+- **Purpose**: User login authentication
+- **Data Flow**: See implementation
+- **Dependencies**: Direct connection
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### API Gateway → AuthMiddleware
+- **Connection Type**: service_call
+- **Purpose**: Request authorization check
+- **Data Flow**: See implementation
+- **Dependencies**: Direct connection
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### TokenService → AuthService
+- **Connection Type**: service_call
+- **Purpose**: Token refresh validation
+- **Data Flow**: See implementation
+- **Dependencies**: Direct connection
+- **Added**: 2025-09-20
+- **Context**: Development session
+
+### Service Integration Pattern
+**Discovered**: 2025-09-20
+**Pattern**: Multiple service integrations detected
+**Usage**: Use for microservice communication
+**Integration Points**: N/A

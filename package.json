@@ -1,7 +1,7 @@
 {
   "name": "ai-devops-framework",
-  "version": "1.0.0",
-  "description": "AI DevOps Framework with Institutional Memory Enforcement System",
+  "version": "2.0.0",
+  "description": "Enhanced Institutional Memory Guardrails with Claude Code Best Practices - Core File Focus",
   "main": "institutional-memory-enforcer.js",
   "bin": {
     "memory-enforce": "./cli/memory-enforce"
@@ -15,6 +15,9 @@
     "enforce": "node cli/memory-enforce validate --verbose",
     "decision": "node cli/memory-enforce decision",
     "pattern": "node cli/memory-enforce pattern",
+    "search": "node cli/memory-enforce search",
+    "index": "node cli/memory-enforce index",
+    "core": "node cli/memory-enforce core",
     "memory:validate": "node -e \"require('./institutional-memory-enforcer.js').runMandatoryPreChecks().then(r => console.log('✅ Memory validation passed')).catch(e => {console.error('❌ Memory validation failed:', e.message); process.exit(1);})\"",
     "memory:drift": "node -e \"require('./institutional-memory-enforcer.js').detectDrift().then(r => r.driftDetected ? (console.error('❌ Drift detected'), process.exit(1)) : console.log('✅ No drift detected'))\"",
     "install-hooks": "echo '#!/bin/sh\nnpm run precommit' > .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
@@ -27,12 +30,18 @@
     "jest": "^29.0.0"
   },
   "keywords": [
-    "ai",
-    "devops", 
     "institutional-memory",
     "conventions",
-    "enforcement",
-    "architecture"
+    "symbol-index",
+    "claude-code",
+    "guardrails",
+    "decision-management",
+    "core-files",
+    "structured-reasoning",
+    "think-tool",
+    "enterprise-development",
+    "team-knowledge",
+    "architectural-decisions"
   ],
   "author": "AI DevOps Framework",
   "license": "MIT",
