@@ -1,0 +1,46 @@
+{
+  "name": "ai-devops-framework",
+  "version": "1.0.0",
+  "description": "AI DevOps Framework with Institutional Memory Enforcement System",
+  "main": "institutional-memory-enforcer.js",
+  "bin": {
+    "memory-enforce": "./cli/memory-enforce"
+  },
+  "scripts": {
+    "validate": "node cli/memory-enforce validate",
+    "check": "node cli/memory-enforce check",
+    "drift": "node cli/memory-enforce drift",
+    "init": "node cli/memory-enforce init",
+    "precommit": "npm run validate",
+    "enforce": "node cli/memory-enforce validate --verbose",
+    "decision": "node cli/memory-enforce decision",
+    "pattern": "node cli/memory-enforce pattern",
+    "memory:validate": "node -e \"require('./institutional-memory-enforcer.js').runMandatoryPreChecks().then(r => console.log('✅ Memory validation passed')).catch(e => {console.error('❌ Memory validation failed:', e.message); process.exit(1);})\"",
+    "memory:drift": "node -e \"require('./institutional-memory-enforcer.js').detectDrift().then(r => r.driftDetected ? (console.error('❌ Drift detected'), process.exit(1)) : console.log('✅ No drift detected'))\"",
+    "install-hooks": "echo '#!/bin/sh\nnpm run precommit' > .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
+  },
+  "dependencies": {
+    "commander": "^9.0.0",
+    "chalk": "^4.1.2"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0"
+  },
+  "keywords": [
+    "ai",
+    "devops", 
+    "institutional-memory",
+    "conventions",
+    "enforcement",
+    "architecture"
+  ],
+  "author": "AI DevOps Framework",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/ai-devops-framework.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

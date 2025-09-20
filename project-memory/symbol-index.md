@@ -1,133 +1,65 @@
 # Codebase Symbol Index & Dependencies
 
-*Maintains an index of codebase structure, function dependencies, and interconnections. This context enables Claude to understand existing code and make changes without breaking integrations.*
+*Index of codebase structure, function dependencies, and system connections. This provides context for understanding and modifying code without breaking integrations.*
 
-**Key Function**: This maintains an index of your codebase structure, function dependencies, and interconnections - providing Claude with the context needed to understand and modify existing code without breaking integrations.
+**Updated**: 2025-09-20 (initialized for corporate team)
 
-**Updated**: 2024-09-09 (automatically maintained by Claude during development sessions)
+## Core System Architecture
 
-## Core Service Architecture
+### Main Components
+*[To be populated as system components are identified and documented]*
 
-### Authentication Service (`src/auth-service/core.ts`)
-**Dependencies**:
-- **Database**: `userRepository` (PostgreSQL user tables)
-- **Cache**: `redisClient` (session storage)
-- **Email**: `emailService` (verification emails)
-- **Crypto**: `bcrypt`, `jsonwebtoken` libraries
+**Component**: [Name]
+- **Location**: `[file path]`
+- **Purpose**: [What this component does]
+- **Dependencies**: [What it depends on]
+- **Used By**: [What uses this component]
 
-**Exports**:
-- `authenticateUser()` → Used by API middleware (MOVED from src/services/auth/ on 2024-09-09)
-- `generateTokens()` → Used by login/refresh endpoints  
-- `validateSession()` → Used by protected routes
-- `revokeSession()` → Used by logout functionality
+## Function Index
 
-**Integration Points**:
-- **API Gateway**: All `/auth/*` routes depend on this service
-- **User Service**: Calls `validateSession()` for user data requests
-- **Admin Service**: Requires admin role validation through this service
+### Core Functions
+*[To be populated as functions are created and documented]*
 
-### User Management Service (`src/services/users/`)
-**Dependencies**:
-- **Auth Service**: `validateSession()` for permission checks
-- **Database**: `userRepository`, `profileRepository`
-- **Storage**: `s3Client` for profile images
-- **Validation**: `userValidationSchemas`
+**Function**: [functionName]
+- **Location**: `[file]:[line number]`
+- **Purpose**: [What the function does]
+- **Parameters**: [Input parameters]
+- **Returns**: [Return value/type]
+- **Dependencies**: [What it calls or requires]
 
-**Exports**:
-- `getUserProfile()` → Used by frontend user dashboard
-- `updateUserProfile()` → Used by profile edit forms
-- **deleteUser()** → Used by admin panel and GDPR compliance
-- `listUsers()` → Used by admin user management interface
+## System Connections
 
-**Integration Points**:
-- **Frontend Dashboard**: Directly consumes user profile data
-- **Admin Panel**: Uses user management functions with role validation
-- **Audit Service**: Receives user action events for compliance logging
+### Integration Points
+*[To be populated as system integrations are built]*
 
-## Agent Coordination Discoveries
+**Connection**: [ComponentA] → [ComponentB]
+- **Type**: [API call, database query, file operation, etc.]
+- **Purpose**: [Why this connection exists]
+- **Data Flow**: [What data flows between components]
+- **Dependencies**: [What this connection requires]
 
-### Successful Coordination Patterns
-*[Discovered during actual project work - populated by Claude]*
+## Discovered Patterns
 
-**Pattern**: [Name of coordination approach]
-- **Agents involved**: [Which agents participated]
-- **Project context**: [What project/feature this worked on]
-- **Coordination method**: [How they worked together]  
-- **Success indicators**: [Why this approach was effective]
-- **Reusability**: [When this pattern applies to future projects]
+### Development Patterns
+*[To be populated as successful patterns are discovered]*
 
-### Agent Dependency Mapping
-*[Updated as dependencies are discovered during coordination]*
+**Pattern**: [PatternName]
+- **Context**: [When this pattern was discovered]
+- **Description**: [What the pattern involves]
+- **Usage**: [When to apply this pattern]
+- **Examples**: [Where this pattern is used]
 
-**Agent Dependencies Discovered**:
-- **[Agent Name] → [Required Input From]**: [Specific dependency discovered]
-- **[Agent Name] ↔ [Coordination With]**: [Bi-directional coordination needed]
-- **[Agent Name] → [Provides To]**: [What this agent delivers to others]
+## External Dependencies
 
-### Cross-Agent Integration Points
-*[Documented as integration challenges and solutions are discovered]*
+### Third-Party Libraries
+*[To be populated as external dependencies are added]*
 
-**Integration Point**: [Specific coordination challenge]
-- **Agents involved**: [Which agents needed to coordinate]
-- **Challenge**: [What made coordination difficult]
-- **Solution pattern**: [How coordination was achieved]
-- **Future application**: [When to use this coordination approach]
-
-## Connection Network Evolution
-
-### Agent Relationship Strengths
-*[Mapped as relationships prove effective or problematic]*
-
-**Strong Coordination Pairs**:
-- **[Agent A] + [Agent B]**: [Why they work well together]
-- **[Agent C] + [Agent D]**: [What makes their coordination effective]
-
-**Challenging Coordination Points**:  
-- **[Agent X] ↔ [Agent Y]**: [What coordination challenges exist]
-- **Resolution approach**: [How to handle this coordination challenge]
-
-### Communication Flow Discoveries
-*[Documented as effective communication patterns emerge]*
-
-**Effective Communication Patterns**:
-- **[Situation]**: [What type of project/challenge]  
-- **Communication flow**: [How agents should communicate for this situation]
-- **Key handoff points**: [Critical information transfer moments]
-- **Success metrics**: [How to know communication is working]
-
-## Project-Specific Pattern Learnings
-
-### Authentication System Patterns
-*[Example - to be populated with actual learnings]*
-
-### API Development Patterns  
-*[To be populated as API projects are completed]*
-
-### Frontend Integration Patterns
-*[To be populated as UI projects are completed]*
-
-### Security Implementation Patterns
-*[To be populated as security projects are completed]*
-
-## Institutional Memory
-
-### Repeated Decision Patterns
-*[Track which human decisions tend to repeat across projects]*
-
-**Decision Pattern**: [Type of recurring decision]
-- **Frequency**: [How often this decision type occurs]
-- **Common choice**: [What humans typically decide]
-- **Context factors**: [When humans choose differently]
-- **Convention status**: [Whether this is now codified]
-
-### Agent Capability Evolution
-*[Document how agent effectiveness changes over time]*
-
-**Agent Improvement Observations**:
-- **[Agent Name]**: [How performance/coordination has improved]
-- **Coordination enhancement**: [How multi-agent work has gotten better]
-- **Pattern recognition**: [What coordination patterns are becoming automatic]
+**Library**: [LibraryName]
+- **Version**: [Version used]
+- **Purpose**: [Why this library is used]
+- **Components Using**: [Which parts of system use it]
+- **Documentation**: [Link to library docs]
 
 ---
 
-*This document grows through actual project experience. Each coordination session adds discovered patterns, successful relationships, and integration solutions that improve future multi-agent collaboration.*
+*This document grows through development work. Each function created, integration built, and pattern discovered gets documented here to maintain institutional knowledge of the codebase structure.*

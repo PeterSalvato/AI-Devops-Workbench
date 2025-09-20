@@ -1,0 +1,354 @@
+#!/usr/bin/env node
+
+/**
+ * Institutional Memory Enforcement CLI
+ * 
+ * Command-line tool for validating and maintaining institutional memory integrity.
+ * Usage: ./cli/memory-enforce [command] [options]
+ */
+
+const { program } = require('commander');
+const InstitutionalMemoryEnforcer = require('../institutional-memory-enforcer.js');
+const chalk = require('chalk');
+const path = require('path');
+
+// Initialize enforcer
+const enforcer = new InstitutionalMemoryEnforcer(process.cwd());
+
+program
+  .name('memory-enforce')
+  .description('Institutional Memory Enforcement CLI')
+  .version('1.0.0');
+
+// Validate command - run all checks
+program
+  .command('validate')
+  .description('Run complete institutional memory validation')
+  .option('-v, --verbose', 'show detailed output')
+  .action(async (options) => {
+    console.log(chalk.blue('🔍 Running institutional memory validation...\n'));
+    
+    try {
+      const results = await enforcer.runMandatoryPreChecks();
+      
+      console.log(chalk.green('✅ ALL CHECKS PASSED'));
+      
+      if (options.verbose) {
+        console.log('\nDetailed Results:');
+        console.log(JSON.stringify(results, null, 2));
+      }
+      
+      // Also run drift detection
+      console.log(chalk.blue('\n🔍 Checking for institutional memory drift...'));
+      const driftResults = await enforcer.detectDrift();
+      
+      if (driftResults.driftDetected) {
+        console.log(chalk.yellow('⚠️  DRIFT DETECTED:'));
+        driftResults.issues.forEach(issue => {
+          console.log(chalk.yellow(`  - ${issue.type}: ${issue.count || 'detected'}`));
+        });
+        console.log('\nRecommended actions:');
+        driftResults.recommendedActions.forEach(action => {
+          console.log(chalk.cyan(`  • ${action}`));
+        });
+        process.exit(1);
+      } else {
+        console.log(chalk.green('✅ No drift detected - institutional memory is current'));
+      }
+      
+    } catch (error) {
+      console.error(chalk.red('❌ VALIDATION FAILED:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+// Check command - quick health check
+program
+  .command('check')
+  .description('Quick health check of institutional memory files')
+  .action(async () => {
+    console.log(chalk.blue('🔍 Quick institutional memory health check...\n'));
+    
+    try {
+      const filesExist = await enforcer.validateFilesExist();
+      const structure = await enforcer.validateFileStructure();
+      
+      if (filesExist.passed) {
+        console.log(chalk.green('✅ Required files exist'));
+      } else {
+        console.log(chalk.red('❌ Missing required files'));
+        console.log(chalk.red(JSON.stringify(filesExist.details, null, 2)));
+      }
+      
+      if (structure.passed) {
+        console.log(chalk.green('✅ File structure valid'));
+      } else {
+        console.log(chalk.red('❌ Invalid file structure'));
+        console.log(chalk.red(JSON.stringify(structure.details, null, 2)));
+      }
+      
+      if (!filesExist.passed || !structure.passed) {
+        process.exit(1);
+      }
+      
+    } catch (error) {
+      console.error(chalk.red('❌ CHECK FAILED:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+// Decision command - capture new architectural decision
+program
+  .command('decision')
+  .description('Capture a new architectural decision')
+  .option('-t, --title <title>', 'decision title')
+  .option('-c, --context <context>', 'project context')
+  .option('-s, --standard <standard>', 'technical standard')
+  .option('-r, --rationale <rationale>', 'decision rationale')
+  .option('--scope <scope>', 'application scope')
+  .action(async (options) => {
+    if (!options.title || !options.context || !options.standard || !options.rationale) {
+      console.error(chalk.red('❌ Missing required options. All of --title, --context, --standard, --rationale are required.'));
+      process.exit(1);
+    }
+    
+    const decision = {
+      title: options.title,
+      context: options.context,
+      standard: options.standard,
+      rationale: options.rationale,
+      scope: options.scope || 'This project'
+    };
+    
+    try {
+      const result = await enforcer.captureNewDecision(decision);
+      console.log(chalk.green('✅ Decision captured successfully'));
+      console.log(chalk.blue('Decision entry:'));
+      console.log(result.entry);
+    } catch (error) {
+      console.error(chalk.red('❌ Failed to capture decision:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+// Pattern command - capture new coordination pattern
+program
+  .command('pattern')
+  .description('Capture a new coordination pattern')
+  .option('-n, --name <name>', 'pattern name')
+  .option('-c, --context <context>', 'discovery context')
+  .option('-d, --description <description>', 'pattern description')
+  .option('-u, --usage <usage>', 'how to use pattern')
+  .option('-i, --integrations <integrations>', 'integration points (comma-separated)')
+  .action(async (options) => {
+    if (!options.name || !options.context || !options.description || !options.usage) {
+      console.error(chalk.red('❌ Missing required options. All of --name, --context, --description, --usage are required.'));
+      process.exit(1);
+    }
+    
+    const pattern = {
+      name: options.name,
+      context: options.context,
+      description: options.description,
+      usage: options.usage,
+      integrations: options.integrations ? options.integrations.split(',').map(s => s.trim()) : []
+    };
+    
+    try {
+      const result = await enforcer.captureNewPattern(pattern);
+      console.log(chalk.green('✅ Pattern captured successfully'));
+      console.log(chalk.blue('Pattern entry:'));
+      console.log(result.entry);
+    } catch (error) {
+      console.error(chalk.red('❌ Failed to capture pattern:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+// Drift command - detect institutional memory drift
+program
+  .command('drift')
+  .description('Detect institutional memory drift and inconsistencies')
+  .action(async () => {
+    console.log(chalk.blue('🔍 Scanning for institutional memory drift...\n'));
+    
+    try {
+      const results = await enforcer.detectDrift();
+      
+      if (!results.driftDetected) {
+        console.log(chalk.green('✅ No drift detected - institutional memory is current and consistent'));
+        return;
+      }
+      
+      console.log(chalk.yellow('⚠️  INSTITUTIONAL MEMORY DRIFT DETECTED\n'));
+      
+      results.issues.forEach((issue, index) => {
+        console.log(chalk.yellow(`${index + 1}. ${issue.type}`));
+        if (issue.count) {
+          console.log(chalk.gray(`   Count: ${issue.count}`));
+        }
+        if (issue.details && Array.isArray(issue.details)) {
+          issue.details.forEach(detail => {
+            console.log(chalk.gray(`   - ${detail}`));
+          });
+        }
+        console.log('');
+      });
+      
+      console.log(chalk.cyan('RECOMMENDED ACTIONS:'));
+      results.recommendedActions.forEach(action => {
+        console.log(chalk.cyan(`• ${action}`));
+      });
+      
+      process.exit(1);
+      
+    } catch (error) {
+      console.error(chalk.red('❌ DRIFT DETECTION FAILED:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+// Init command - initialize institutional memory files
+program
+  .command('init')
+  .description('Initialize institutional memory files for new project')
+  .option('--force', 'overwrite existing files')
+  .action(async (options) => {
+    console.log(chalk.blue('🚀 Initializing institutional memory system...\n'));
+    
+    const fs = require('fs');
+    const projectMemoryDir = path.join(process.cwd(), 'project-memory');
+    const conventionsPath = path.join(projectMemoryDir, 'conventions.md');
+    const symbolIndexPath = path.join(projectMemoryDir, 'symbol-index.md');
+    
+    // Create project-memory directory if it doesn't exist
+    if (!fs.existsSync(projectMemoryDir)) {
+      fs.mkdirSync(projectMemoryDir, { recursive: true });
+      console.log(chalk.green('✅ Created project-memory directory'));
+    }
+    
+    // Check if files already exist
+    if (fs.existsSync(conventionsPath) && !options.force) {
+      console.error(chalk.yellow('⚠️  conventions.md already exists. Use --force to overwrite.'));
+      process.exit(1);
+    }
+    
+    if (fs.existsSync(symbolIndexPath) && !options.force) {
+      console.error(chalk.yellow('⚠️  symbol-index.md already exists. Use --force to overwrite.'));
+      process.exit(1);
+    }
+    
+    // Create template conventions.md
+    const conventionsTemplate = `# Team Conventions & Architectural Decisions
+
+*Team-wide architectural decisions and coding standards that guide all development work. These conventions are the single source of truth for all development decisions.*
+
+**Priority**: HIGHEST - Team conventions are the only decision source (no individual preferences)  
+**Scope**: All team members must follow these decisions  
+**Updates**: Requires team consensus or technical lead approval  
+**Updated**: ${new Date().toISOString().split('T')[0]} (initialized by institutional memory enforcer)
+
+## Technology Stack Preferences
+
+### Development Standards
+**Decision Made**: ${new Date().toISOString().split('T')[0]} (Project initialization)  
+**Technology**: [To be determined based on project requirements]  
+**Rationale**: [To be documented when technology decisions are made]  
+**Apply To**: [Scope to be defined]  
+
+## Security Standards
+
+### Security Requirements  
+**Decision Made**: ${new Date().toISOString().split('T')[0]} (Project initialization)  
+**Standard**: [Security standards to be determined]  
+**Implementation**: [Implementation details to be documented]  
+**Apply To**: All systems and components  
+
+## Code Quality Standards
+
+### Quality Requirements
+**Decision Made**: ${new Date().toISOString().split('T')[0]} (Project initialization)  
+**Standards**: [Quality standards to be determined]  
+**Apply To**: All production code  
+
+---
+
+*This conventions file is automatically maintained by the institutional memory enforcement system. It ensures consistent application of team preferences across all projects, preventing architectural drift and maintaining enterprise-grade consistency.*
+`;
+
+    // Create template symbol-index.md
+    const symbolIndexTemplate = `# Codebase Symbol Index & Dependencies
+
+*Maintains an index of codebase structure, function dependencies, and interconnections. This context enables development work to understand existing code and make changes without breaking integrations.*
+
+**Key Function**: This maintains an index of your codebase structure, function dependencies, and interconnections - providing context needed to understand and modify existing code without breaking integrations.
+
+**Updated**: ${new Date().toISOString().split('T')[0]} (initialized by institutional memory enforcer)
+
+## Core Service Architecture
+
+### Core Services
+*[To be populated as services are identified and documented]*
+
+**Dependencies**:
+- [Service dependencies to be documented]
+
+**Exports**:
+- [Service exports to be documented]
+
+**Integration Points**:
+- [Integration points to be documented]
+
+## Agent Coordination Discoveries
+
+### Successful Coordination Patterns
+*[Discovered during actual project work - populated automatically]*
+
+**Pattern**: [Name of coordination approach]
+- **Context**: [Project/feature context]
+- **Approach**: [How coordination was achieved]  
+- **Success indicators**: [Why this approach was effective]
+- **Reusability**: [When this pattern applies to future projects]
+
+## Connection Network Evolution
+
+### Relationship Discoveries
+*[Mapped as relationships prove effective or problematic]*
+
+**Effective Patterns**:
+- [Effective coordination patterns to be discovered]
+
+**Integration Points**:  
+- [Integration challenges and solutions to be documented]
+
+---
+
+*This document grows through actual project experience. Each development session adds discovered patterns, successful relationships, and integration solutions that improve future development work.*
+`;
+
+    try {
+      fs.writeFileSync(conventionsPath, conventionsTemplate);
+      console.log(chalk.green('✅ Created conventions.md template'));
+      
+      fs.writeFileSync(symbolIndexPath, symbolIndexTemplate);
+      console.log(chalk.green('✅ Created symbol-index.md template'));
+      
+      console.log(chalk.blue('\n🎉 Institutional memory system initialized successfully!'));
+      console.log(chalk.gray('\nNext steps:'));
+      console.log(chalk.gray('1. Populate conventions.md with your team\'s architectural decisions'));
+      console.log(chalk.gray('2. Document your codebase structure in symbol-index.md'));
+      console.log(chalk.gray('3. Run "memory-enforce validate" to verify setup'));
+      
+    } catch (error) {
+      console.error(chalk.red('❌ Initialization failed:'));
+      console.error(chalk.red(error.message));
+      process.exit(1);
+    }
+  });
+
+program.parse();

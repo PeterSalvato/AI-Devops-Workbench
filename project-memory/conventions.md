@@ -1,261 +1,51 @@
 # Team Conventions & Architectural Decisions
 
-*Team-wide architectural decisions and coding standards that Claude applies consistently across all development work. These conventions are the single source of truth for all development decisions.*
+*Team architectural decisions that guide all development work. These conventions are the single source of truth for development standards.*
 
-**Priority**: HIGHEST - Team conventions are the only decision source (no individual preferences)  
-**Scope**: All team members must follow these decisions  
-**Updates**: Requires team consensus or technical lead approval  
-**Updated**: 2024-09-09 (automatically maintained by Claude during development sessions)
+**Updated**: 2025-09-20 (initialized for corporate team)
 
-## Technology Stack Preferences
+## Technology Stack Standards
 
-### Backend Development Standards
-**Decision Made**: 2024-08-15 (E-commerce project)  
-**Technology**: Node.js + Express + TypeScript + PostgreSQL  
-**Rationale**: Team expertise, mature ecosystem, TypeScript safety  
-**Apply To**: All backend services and APIs  
-
-```typescript
-// Standardized API response format
-interface APIResponse<T> {
-  success: boolean;
-  data?: T;
-  error?: {
-    code: string;
-    message: string;
-    details?: any;
-  };
-  timestamp: string;
-}
-```
-
-### Frontend Development Standards
-**Decision Made**: 2024-08-10 (Customer portal project)  
-**Technology**: React + TypeScript + Next.js + Tailwind CSS  
-**Rationale**: SSR performance needs, design system compatibility  
-**Apply To**: All user-facing applications  
-
-```typescript
-// Component structure standard
-interface ComponentProps {
-  className?: string;
-  children?: React.ReactNode;
-  testId?: string;
-}
-```
-
-### Database Standards
-**Decision Made**: 2024-08-15 (E-commerce architecture)  
-**Pattern**: PostgreSQL primary + Redis caching, database-per-service  
-**Rationale**: Data consistency + service autonomy + proven reliability  
-**Apply To**: All microservices data architecture  
-
-```sql
--- Naming conventions
--- Tables: snake_case (user_accounts, order_items)
--- Indexes: idx_tablename_columnname
--- Foreign keys: fk_tablename_referencedtable
-```
+### Development Standards
+**Decision Made**: [To be captured when team makes first technology choice]  
+**Technology**: [Framework, language, tools to be decided]  
+**Rationale**: [Reasoning for choice]  
+**Apply To**: [Scope of application]  
 
 ## Security Standards
 
 ### Authentication Requirements  
-**Decision Made**: 2024-09-06 (User auth system)  
-**Standard**: JWT + OAuth2 + TOTP 2FA for admin roles  
-**Implementation**: 15-min access tokens, 30-day refresh with rotation  
-**Apply To**: All authentication systems  
-
-```typescript
-// JWT payload standard
-interface JWTPayload {
-  userId: string;
-  email: string;
-  role: 'admin' | 'user' | 'guest';
-  permissions: string[];
-  mfaVerified: boolean;
-  iat: number;
-  exp: number;
-}
-```
-
-### API Security Requirements
-**Decision Made**: 2024-09-01 (Partner API project)  
-**Standard**: OAuth2 client credentials + comprehensive rate limiting + audit logging  
-**Rate Limits**: 1000 req/hr per API key, 100 req/min per endpoint  
-**Apply To**: All external-facing APIs  
-
-### Frontend Security Standards
-**Decision Made**: 2024-08-20 (Customer web app)  
-**Standard**: Content Security Policy + SameSite cookies + security headers  
-**CSP**: Strict with nonce-based script loading  
-**Apply To**: All customer-facing applications
-
-### Password Security Standards
-**Decision Made**: 2024-09-09 (Password complexity implementation)  
-**Standard**: Minimum 12 characters with uppercase, lowercase, numbers, and special characters  
-**Implementation**: Centralized validatePasswordComplexity() function with configurable rules  
-**Apply To**: All authentication systems and password change functionality  
-
-```typescript
-// Password complexity standard
-const DEFAULT_PASSWORD_RULES = {
-  minLength: 12,
-  requireUppercase: true,
-  requireLowercase: true, 
-  requireNumbers: true,
-  requireSpecialChars: true
-};
-```
+**Decision Made**: [To be captured when authentication approach is decided]  
+**Standard**: [Authentication method to be chosen]  
+**Implementation**: [How authentication will be implemented]  
+**Apply To**: All user access and system security  
 
 ## Code Quality Standards
 
-### Code Style Preferences  
-**Decision Made**: 2024-07-20 (Team standardization)  
-**Standards**: Prettier + ESLint + strict TypeScript  
-**Naming**: camelCase variables, PascalCase components, UPPER_SNAKE_CASE constants  
-**Apply To**: All JavaScript/TypeScript code  
-
-```typescript
-// File naming conventions
-// Components: UserProfile.tsx
-// Utilities: dateUtils.ts  
-// Constants: API_ENDPOINTS.ts
-// Types: userTypes.ts
-
-// Function naming standard
-const calculateTotalPrice = (items: CartItem[]): number => {
-  // Implementation
-};
-
-// Component naming standard  
-const UserProfileCard: React.FC<UserProfileProps> = ({ user }) => {
-  // Implementation
-};
-```
-
-### Testing Requirements
-**Decision Made**: 2024-08-05 (Quality improvement initiative)  
-**Standards**: Jest + Testing Library, 80% coverage minimum  
-**Structure**: Separate test files, descriptive test names  
+### Testing Strategy
+**Decision Made**: [To be captured when testing approach is decided]  
+**Standards**: [Testing tools and coverage requirements]  
 **Apply To**: All production code  
 
-```typescript
-// Test file naming: UserProfile.test.tsx
-describe('UserProfile Component', () => {
-  it('should display user name when user data is provided', () => {
-    // Test implementation
-  });
-
-  it('should handle missing user data gracefully', () => {
-    // Test implementation  
-  });
-});
-```
-
-### Documentation Requirements
-**Decision Made**: 2024-08-25 (Team onboarding improvement)  
-**Standards**: JSDoc for functions, README for modules, API docs for endpoints  
-**Level**: Public APIs documented, complex logic explained  
-**Apply To**: All shared code and modules  
-
-```typescript
-/**
- * Calculates the total price including tax and discounts
- * @param items - Array of cart items to calculate total for
- * @param taxRate - Tax rate as decimal (0.08 for 8%)
- * @param discountCode - Optional discount code to apply
- * @returns Total price with tax and discounts applied
- */
-const calculateTotal = (
-  items: CartItem[], 
-  taxRate: number, 
-  discountCode?: string
-): number => {
-  // Implementation
-};
-```
+### Code Style
+**Decision Made**: [To be captured when code standards are decided]  
+**Standards**: [Formatting, linting, review process]  
+**Apply To**: All code in repository  
 
 ## Development Process Standards
 
-### Git Workflow Preferences  
-**Decision Made**: 2024-07-15 (Team collaboration improvement)  
-**Standard**: Feature branches + PR reviews + squash merging  
-**Branch Naming**: feature/TICKET-123-description, bugfix/issue-description  
-**Apply To**: All repositories  
+### Git Workflow
+**Decision Made**: [To be captured when workflow is decided]  
+**Standard**: [Branching strategy, review process, merge approach]  
+**Apply To**: All code changes and releases  
 
-```bash
-# Branch naming examples
-git checkout -b feature/AUTH-456-implement-2fa
-git checkout -b bugfix/payment-validation-error  
-git checkout -b hotfix/security-vulnerability-fix
-```
-
-### Error Handling Standards
-**Decision Made**: 2024-09-03 (Production reliability improvement)  
-**Standard**: Structured error objects, comprehensive logging, user-friendly messages  
-**Logging**: Winston with structured JSON, correlation IDs  
-**Apply To**: All backend services and critical frontend functions  
-
-```typescript
-// Error handling standard
-class APIError extends Error {
-  constructor(
-    public code: string,
-    message: string,
-    public statusCode: number = 500,
-    public details?: any
-  ) {
-    super(message);
-    this.name = 'APIError';
-  }
-}
-
-// Usage example
-try {
-  await processPayment(paymentData);
-} catch (error) {
-  logger.error('Payment processing failed', {
-    correlationId,
-    userId,
-    error: error.message,
-    details: error.details
-  });
-  
-  throw new APIError(
-    'PAYMENT_FAILED', 
-    'Unable to process payment at this time',
-    400,
-    { originalError: error.message }
-  );
-}
-```
-
-## Team Size & Scalability Constraints
-
-### Recommended Team Size Limit
-**Decision Made**: 2024-09-09 (System scalability analysis)  
-**Limit**: Maximum 10 developers per framework instance (15 absolute maximum)  
-**Rationale**: Single conventions file + decision coordination complexity (individual preferences eliminated)  
-**Apply To**: All framework deployments  
-
-### Scalability Constraints
-- **Context Management**: Single conventions file becomes unwieldy beyond 10 concurrent decisions
-- **Decision Authority**: Current hierarchy (security > architecture > domain) assumes small team structure  
-- **Cognitive Load**: Meta-orchestrator coordination complexity increases exponentially with team size
-- **Quality Gates**: Validation patterns designed for small team consensus, not enterprise review cycles
-
-### Beyond 10 Developers
-Teams larger than 10 developers require additional safeguards:
-- Hierarchical conventions (team/squad/guild levels)
-- Automated convention conflict detection  
-- Role-based decision authority matrices
-- Convention approval workflows with formal sign-off
-- Multiple framework instances with cross-instance coordination
+### Deployment Process
+**Decision Made**: [To be captured when deployment approach is decided]  
+**Standard**: [CI/CD pipeline, environment management]  
+**Apply To**: All application deployments  
 
 ---
 
-*This conventions file is automatically updated by Claude when you make architectural decisions during development. It ensures consistent application of your preferences across all projects, preventing "vibecoding" and maintaining enterprise-grade consistency.*
+*This file is automatically maintained through the institutional memory guardrails system. Each architectural decision made by the team is immediately documented here with rationale and scope.*
 
----
 
-*This document is automatically updated based on project learnings and coordination experiences. Last updated: [Date will be auto-updated by Claude during sessions]*
